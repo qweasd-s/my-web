@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>双光路偏心仪软件 — 刘东琦</title>
+  <meta name="description" content="双光路偏心测量软件初版：提取两路光斑/中心位置，计算镜片偏心量，精度 µm 级。">
+  <meta name="theme-color" content="#0a0d0f">
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="../assets/fonts/noto-sans-sc.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="work.css">
+</head>
+<body class="case-page" data-project="decentration">
+  <a class="skip" href="#demo">跳到效果演示</a>
+
+  <header class="topbar">
+    <div class="topbar__inner">
+      <a class="topbar__brand" href="../index.html#work">← 返回名片</a>
+      <span class="topbar__job">JOB 03 / DECENTRATION <span>LDQ-2026-001</span></span>
+      <span class="topbar__status"><i></i>OPEN</span>
+      <a class="topbar__email" href="mailto:2823641678@qq.com">Email ↗</a>
+    </div>
+  </header>
+
+  <main class="case" id="demo">
+    <div class="wrap">
+      <header class="case-head">
+        <h1>双光路偏心仪软件<span class="badge">初版</span></h1>
+        <p class="case-head__lead">用两束光，找到镜片的中心。</p>
+        <dl class="case-head__facts">
+          <div><dt>INPUT</dt><dd>双光路图像</dd></div>
+          <div><dt>OUTPUT</dt><dd>偏心量 Δ</dd></div>
+          <div><dt>PRECISION</dt><dd>µm 级</dd></div>
+          <div><dt>VERSION</dt><dd>初版</dd></div>
+        </dl>
+      </header>
+
+      <section class="demo" aria-label="双光路偏心测量演示">
+        <div class="demo__head">
+          <span class="demo__label"><i></i>TEST STATION / DECENTRATION</span>
+          <span class="demo__note">示意数据 · 非真实测量结果</span>
+        </div>
+
+        <div class="demo__grid">
+          <div class="demo__stage dec-stage">
+            <svg data-dec-svg viewBox="0 0 720 460" role="img" aria-labelledby="dec-demo-title">
+              <title id="dec-demo-title">双光路偏心测量示意</title>
+              <g data-dec-plot></g>
+            </svg>
+            <div class="stage-hud">
+              <span>DUAL PATH / LENS</span>
+              <span>Δ = <b data-dec-offset>12</b> µm</span>
+            </div>
+            <div class="stage-hud stage-hud--bottom">
+              <span>CH A / B</span>
+              <span>MECHANICAL AXIS</span>
+            </div>
+          </div>
+
+          <aside class="readout" aria-label="测量读数">
+            <p class="readout__label">DECENTERING / Δ</p>
+            <p class="readout__value"><span data-dec-value>12</span><small>µm</small></p>
+            <p class="readout__sub">双光路 · 初版 · 示意数据</p>
+            <div class="readout__bar"><i data-dec-bar></i></div>
+            <dl class="readout__list">
+              <div><dt>通道</dt><dd>A / B</dd></div>
+              <div><dt>精度</dt><dd>µm 级</dd></div>
+              <div><dt>版本</dt><dd>初版</dd></div>
+            </dl>
+          </aside>
+        </div>
+
+        <div class="demo__controls">
+          <label class="control">
+            <span>模拟偏心量 Δ <b><span data-dec-offset>12</span> µm</b></span>
+            <input type="range" min="0" max="50" step="1" value="12" data-dec-input>
+          </label>
+          <div class="control control--note">
+            <span>测量方式 <b>双光路</b></span>
+            <p>拖动滑块，查看光轴相对机械轴的偏移，以及两路光束在传感器上的落点。</p>
+          </div>
+        </div>
+      </section>
+
+      <div class="case-grid">
+        <section class="case-block">
+          <h2>测量流程</h2>
+          <ol class="steps">
+            <li>
+              <span>01</span>
+              <div>
+                <b>双光路采集</b>
+                <p>两路光学系统从不同方向获取镜片中心图像，保留中心与传感器基准。</p>
+              </div>
+            </li>
+            <li>
+              <span>02</span>
+              <div>
+                <b>提取光斑 / 中心</b>
+                <p>对两路图像做光斑或中心提取，得到相对机械轴的位置。</p>
+              </div>
+            </li>
+            <li>
+              <span>03</span>
+              <div>
+                <b>计算偏心量</b>
+                <p>根据两路结果的差值计算偏心量，输出 µm 级读数并记录测量结果。</p>
+              </div>
+            </li>
+          </ol>
+        </section>
+
+        <aside class="case-specs">
+          <h2>规格</h2>
+          <dl>
+            <div><dt>输入</dt><dd>双光路图像</dd></div>
+            <div><dt>输出</dt><dd>偏心量 Δ</dd></div>
+            <div><dt>精度</dt><dd>µm 级</dd></div>
+            <div><dt>版本</dt><dd>初版</dd></div>
+          </dl>
+          <p class="case-note">演示中的偏心量由滑块模拟，用于说明光轴、机械轴与传感器落点的关系；真实测量流程与精度以软件输出为准。</p>
+        </aside>
+      </div>
+
+      <nav class="case-next" aria-label="下一个项目">
+        <a href="mtf.html">
+          <span>下一项 / 01</span>
+          <b>MTF 计算软件 →</b>
+        </a>
+      </nav>
+    </div>
+  </main>
+
+  <footer class="case-footer">
+    <div class="wrap case-footer__inner">
+      <a href="../index.html#work">← 返回所有工作</a>
+      <a href="mailto:2823641678@qq.com">2823641678@qq.com ↗</a>
+      <span>© 2026 刘东琦</span>
+    </div>
+  </footer>
+
+  <script src="work.js" defer></script>
+</body>
+</html>

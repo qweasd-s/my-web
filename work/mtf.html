@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MTF 计算软件 — 刘东琦</title>
+  <meta name="description" content="单频线对图 MTF 计算演示：采集固定空间频率的线对图，读取亮暗条纹的亮度极值，计算该频率下的 MTF。">
+  <meta name="theme-color" content="#0a0d0f">
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="../assets/fonts/noto-sans-sc.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="work.css">
+</head>
+<body class="case-page" data-project="mtf">
+  <a class="skip" href="#demo">跳到效果演示</a>
+
+  <header class="topbar">
+    <div class="topbar__inner">
+      <a class="topbar__brand" href="../index.html#work">← 返回名片</a>
+      <span class="topbar__job">JOB 01 / MTF <span>LDQ-2026-001</span></span>
+      <span class="topbar__status"><i></i>OPEN</span>
+      <a class="topbar__email" href="mailto:2823641678@qq.com">Email ↗</a>
+    </div>
+  </header>
+
+  <main class="case" id="demo">
+    <div class="wrap">
+      <header class="case-head">
+        <h1>MTF 计算软件</h1>
+        <p class="case-head__lead">在单一空间频率下，把线对图的对比度变成 MTF。</p>
+        <dl class="case-head__facts">
+          <div><dt>INPUT</dt><dd>单频线对图</dd></div>
+          <div><dt>OUTPUT</dt><dd>MTF @ f₀</dd></div>
+          <div><dt>PRECISION</dt><dd>µm 级</dd></div>
+          <div><dt>STATUS</dt><dd>OPEN</dd></div>
+        </dl>
+      </header>
+
+      <section class="demo" aria-label="单频线对图 MTF 演示">
+        <div class="demo__head">
+          <span class="demo__label"><i></i>TEST STATION / MTF</span>
+          <span class="demo__note">示意数据 · 非真实测量结果</span>
+        </div>
+
+        <div class="demo__grid">
+          <div class="demo__stage mtf-stage" data-mtf-stage>
+            <svg class="linepair" data-linepair-svg viewBox="0 0 1000 500" preserveAspectRatio="none" aria-hidden="true">
+              <defs>
+                <pattern id="mtf-lp" patternUnits="userSpaceOnUse" width="24" height="500">
+                  <rect width="24" height="500" fill="#0a0d0f"/>
+                  <rect width="12" height="500" fill="#e6eef0"/>
+                </pattern>
+              </defs>
+              <rect width="1000" height="500" fill="url(#mtf-lp)"/>
+            </svg>
+            <div class="mtf-stage__scan" aria-hidden="true"></div>
+            <div class="stage-hud">
+              <span>LINE PAIR / f₀</span>
+              <span>SENSOR VIEW</span>
+            </div>
+            <div class="stage-hud stage-hud--bottom">
+              <span>p = <b data-period>20</b> µm</span>
+              <span>f₀ = <b data-frequency>50</b> lp/mm</span>
+            </div>
+          </div>
+
+          <aside class="readout" aria-label="测量读数">
+            <p class="readout__label">MTF @ f₀ / 示意</p>
+            <p class="readout__value"><span data-mtf>0.78</span><small>MTF</small></p>
+            <p class="readout__sub"><span data-frequency>50</span> lp/mm · p <span data-period>20</span> µm</p>
+            <div class="readout__bar"><i data-mtf-bar></i></div>
+            <dl class="readout__list">
+              <div><dt>Imax</dt><dd data-imax>0.89</dd></div>
+              <div><dt>Imin</dt><dd data-imin>0.11</dd></div>
+              <div><dt>精度</dt><dd>µm 级</dd></div>
+            </dl>
+          </aside>
+        </div>
+
+        <div class="profile">
+          <div class="profile__head"><span>INTENSITY PROFILE / 亮度剖面</span><span>Imax / Imin</span></div>
+          <svg data-profile viewBox="0 0 900 150" preserveAspectRatio="none" aria-hidden="true">
+            <line data-imax-line x1="0" y1="30" x2="900" y2="30" stroke="rgba(230,240,240,.18)" stroke-dasharray="3 6"/>
+            <line data-imin-line x1="0" y1="120" x2="900" y2="120" stroke="rgba(230,240,240,.18)" stroke-dasharray="3 6"/>
+            <path data-profile-path fill="none" stroke="#6fd5c5" stroke-width="1.8"/>
+            <line data-profile-marker x1="450" y1="0" x2="450" y2="150" stroke="#ff6b4f" stroke-dasharray="2 5"/>
+            <circle data-profile-dot cx="450" cy="25" r="3" fill="#ff6b4f"/>
+          </svg>
+        </div>
+
+        <div class="demo__controls">
+          <label class="control">
+            <span>线对周期 <b><span data-period>20</span> µm</b></span>
+            <input type="range" min="10" max="100" step="1" value="20" data-period-input>
+          </label>
+          <label class="control">
+            <span>对焦 <b data-focus-label>清晰</b></span>
+            <input type="range" min="0" max="100" step="1" value="12" data-focus-input>
+          </label>
+        </div>
+      </section>
+
+      <div class="case-grid">
+        <section class="case-block">
+          <h2>测量流程</h2>
+          <ol class="steps">
+            <li>
+              <span>01</span>
+              <div>
+                <b>采集单频线对图</b>
+                <p>在固定空间频率 f₀ 下拍摄线对图，得到清晰的亮暗条纹。</p>
+              </div>
+            </li>
+            <li>
+              <span>02</span>
+              <div>
+                <b>读取亮度极值</b>
+                <p>沿采样线提取亮条纹 Imax 与暗条纹 Imin，得到该频率下的对比度。</p>
+              </div>
+            </li>
+            <li>
+              <span>03</span>
+              <div>
+                <b>计算该频率的 MTF</b>
+                <p>MTF = (Imax − Imin) / (Imax + Imin)，结果与 µm 级几何量关联。</p>
+              </div>
+            </li>
+          </ol>
+        </section>
+
+        <aside class="case-specs">
+          <h2>规格</h2>
+          <dl>
+            <div><dt>输入</dt><dd>单频线对图</dd></div>
+            <div><dt>输出</dt><dd>MTF @ f₀</dd></div>
+            <div><dt>频率</dt><dd>lp/mm</dd></div>
+            <div><dt>精度</dt><dd>µm 级</dd></div>
+          </dl>
+          <p class="case-note">线对周期 p（µm）与空间频率 f₀（lp/mm）满足 f₀ = 1000 / p。演示数值为模拟数据，用于说明测量流程；真实精度与结果以软件输出为准。</p>
+        </aside>
+      </div>
+
+      <nav class="case-next" aria-label="下一个项目">
+        <a href="distortion.html">
+          <span>下一项 / 02</span>
+          <b>畸变计算软件 →</b>
+        </a>
+      </nav>
+    </div>
+  </main>
+
+  <footer class="case-footer">
+    <div class="wrap case-footer__inner">
+      <a href="../index.html#work">← 返回所有工作</a>
+      <a href="mailto:2823641678@qq.com">2823641678@qq.com ↗</a>
+      <span>© 2026 刘东琦</span>
+    </div>
+  </footer>
+
+  <script src="work.js" defer></script>
+</body>
+</html>

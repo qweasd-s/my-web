@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>畸变计算软件 — 刘东琦</title>
+  <meta name="description" content="从拍摄的网格图像提取格点、拟合畸变模型并计算镜头畸变值，测量精度 µm 级。">
+  <meta name="theme-color" content="#0a0d0f">
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="../assets/fonts/noto-sans-sc.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="work.css">
+</head>
+<body class="case-page" data-project="distortion">
+  <a class="skip" href="#demo">跳到效果演示</a>
+
+  <header class="topbar">
+    <div class="topbar__inner">
+      <a class="topbar__brand" href="../index.html#work">← 返回名片</a>
+      <span class="topbar__job">JOB 02 / DISTORTION <span>LDQ-2026-001</span></span>
+      <span class="topbar__status"><i></i>OPEN</span>
+      <a class="topbar__email" href="mailto:2823641678@qq.com">Email ↗</a>
+    </div>
+  </header>
+
+  <main class="case" id="demo">
+    <div class="wrap">
+      <header class="case-head">
+        <h1>畸变计算软件</h1>
+        <p class="case-head__lead">从一张拍摄的网格图，算出镜头的畸变值。</p>
+        <dl class="case-head__facts">
+          <div><dt>INPUT</dt><dd>拍摄图像</dd></div>
+          <div><dt>OUTPUT</dt><dd>畸变值</dd></div>
+          <div><dt>PRECISION</dt><dd>µm 级</dd></div>
+          <div><dt>STATUS</dt><dd>OPEN</dd></div>
+        </dl>
+      </header>
+
+      <section class="demo" aria-label="图像畸变解算演示">
+        <div class="demo__head">
+          <span class="demo__label"><i></i>TEST STATION / DISTORTION</span>
+          <span class="demo__note">示意数据 · 非真实测量结果</span>
+        </div>
+
+        <div class="demo__grid">
+          <div class="demo__stage dist-stage">
+            <svg data-dist-svg viewBox="0 0 720 460" role="img" aria-labelledby="dist-demo-title">
+              <title id="dist-demo-title">网格畸变与格点检测示意</title>
+              <g data-dist-plot></g>
+            </svg>
+            <div class="stage-hud">
+              <span>CAPTURED IMAGE / GRID</span>
+              <span>k1 = <b data-dist-k>−0.12</b></span>
+            </div>
+            <div class="dist-stage__legend">
+              <span><i class="is-dashed"></i>理想网格</span>
+              <span><i></i>拍摄图像</span>
+              <span><i class="is-dot"></i>检测点</span>
+            </div>
+          </div>
+
+          <aside class="readout" aria-label="测量读数">
+            <p class="readout__label">DISTORTION / EDGE</p>
+            <p class="readout__value"><span data-dist-delta>12</span><small>µm</small></p>
+            <p class="readout__sub">边缘视场 · 示意数据</p>
+            <div class="readout__bar"><i data-dist-bar></i></div>
+            <dl class="readout__list">
+              <div><dt>k1</dt><dd data-dist-k>−0.12</dd></div>
+              <div><dt>格点</dt><dd>63</dd></div>
+              <div><dt>精度</dt><dd>µm 级</dd></div>
+            </dl>
+          </aside>
+        </div>
+
+        <div class="demo__controls">
+          <label class="control">
+            <span>径向畸变系数 k1 <b data-dist-k>−0.12</b></span>
+            <input type="range" min="-0.30" max="0.30" step="0.01" value="-0.12" data-dist-input>
+          </label>
+          <label class="control control--check">
+            <span>显示检测点</span>
+            <input type="checkbox" checked data-dist-points>
+          </label>
+        </div>
+      </section>
+
+      <div class="case-grid">
+        <section class="case-block">
+          <h2>测量流程</h2>
+          <ol class="steps">
+            <li>
+              <span>01</span>
+              <div>
+                <b>拍摄网格标板</b>
+                <p>用待测镜头拍摄已知结构的网格/标板图像，保留完整的视场信息。</p>
+              </div>
+            </li>
+            <li>
+              <span>02</span>
+              <div>
+                <b>提取格点坐标</b>
+                <p>通过图像处理检测网格交点，把理想格点与实拍格点一一对应。</p>
+              </div>
+            </li>
+            <li>
+              <span>03</span>
+              <div>
+                <b>拟合模型并输出</b>
+                <p>拟合径向畸变模型，计算边缘视场的偏移量，输出 µm 级畸变结果。</p>
+              </div>
+            </li>
+          </ol>
+        </section>
+
+        <aside class="case-specs">
+          <h2>规格</h2>
+          <dl>
+            <div><dt>输入</dt><dd>拍摄网格图像</dd></div>
+            <div><dt>输出</dt><dd>畸变值 / 校正图</dd></div>
+            <div><dt>模型</dt><dd>径向畸变（示意）</dd></div>
+            <div><dt>精度</dt><dd>µm 级</dd></div>
+          </dl>
+          <p class="case-note">演示中的 k1 与偏移量为模拟数据，用于说明“图像 → 格点 → 模型 → 畸变值”的流程；真实算法参数与结果以软件输出为准。</p>
+        </aside>
+      </div>
+
+      <nav class="case-next" aria-label="下一个项目">
+        <a href="decentration.html">
+          <span>下一项 / 03</span>
+          <b>双光路偏心仪软件 →</b>
+        </a>
+      </nav>
+    </div>
+  </main>
+
+  <footer class="case-footer">
+    <div class="wrap case-footer__inner">
+      <a href="../index.html#work">← 返回所有工作</a>
+      <a href="mailto:2823641678@qq.com">2823641678@qq.com ↗</a>
+      <span>© 2026 刘东琦</span>
+    </div>
+  </footer>
+
+  <script src="work.js" defer></script>
+</body>
+</html>
