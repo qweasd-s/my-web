@@ -5,11 +5,12 @@ const profile = {
   note: 'AI 软件开发工程师 · 光学测量软件。在镜片与代码之间，做测量光的软件。',
 };
 
-const saveButton = document.querySelector('[data-save-card]');
-let saveTimer;
+/* vCard ------------------------------------------------------------------ */
 
-if (saveButton) {
-  saveButton.addEventListener('click', () => {
+document.querySelectorAll('[data-save-card]').forEach((button) => {
+  let resetTimer;
+
+  button.addEventListener('click', () => {
     try {
       const lines = [
         'BEGIN:VCARD',
@@ -32,24 +33,26 @@ if (saveButton) {
       link.remove();
       window.setTimeout(() => URL.revokeObjectURL(url), 1000);
 
-      const label = saveButton.querySelector('.action-label');
+      const label = button.querySelector('.action-label');
       if (label) {
         const original = label.textContent;
         label.textContent = '已保存';
-        saveButton.classList.add('is-done');
+        button.classList.add('is-done');
 
-        window.clearTimeout(saveTimer);
-        saveTimer = window.setTimeout(() => {
+        window.clearTimeout(resetTimer);
+        resetTimer = window.setTimeout(() => {
           label.textContent = original;
-          saveButton.classList.remove('is-done');
+          button.classList.remove('is-done');
         }, 2200);
       }
     } catch (error) {
-      const label = saveButton.querySelector('.action-label');
+      const label = button.querySelector('.action-label');
       if (label) label.textContent = '请手动保存';
     }
   });
-}
+});
+
+/* Copy email ------------------------------------------------------------- */
 
 const copyButton = document.querySelector('#copy-email');
 
@@ -90,16 +93,47 @@ if (copyButton) {
     const copied = await copyText(copyButton.dataset.email || profile.email);
     if (!copyLabel) return;
 
-    const original = '复制';
     copyLabel.textContent = copied ? '已复制' : '复制失败';
     copyButton.classList.toggle('is-copied', copied);
     copyButton.setAttribute('aria-label', copied ? '邮箱已复制' : '复制邮箱');
 
     window.clearTimeout(copyTimer);
     copyTimer = window.setTimeout(() => {
-      copyLabel.textContent = original;
+      copyLabel.textContent = '复制邮箱';
       copyButton.classList.remove('is-copied');
       copyButton.setAttribute('aria-label', '复制邮箱');
     }, 2200);
   });
+}
+
+/* Home measurement card -------------------------------------------------- */
+
+const homePattern = document.querySelector('#home-lp');
+const homeInput = document.querySelector('[data-home-period-input]');
+
+if (homePattern && homeInput) {
+  const homeRects = homePattern.querySelectorAll('rect');
+  const homeValues = document.querySelectorAll('[data-home-mtf]');
+  const homeFreqs = document.querySelectorAll('[data-home-freq]');
+  const homePeriods = document.querySelectorAll('[data-home-period]');
+
+  const renderHome = () => {
+    const period = Number(homeInput.value) || 20;
+    const frequency = 1000 / period;
+    const periodPx = 4 + (period - 10) * 0.32;
+    const mtf = 0.94 * Math.exp(-0.5 * Math.pow(frequency / 85, 2));
+
+    homePattern.setAttribute('width', periodPx.toFixed(2));
+    if (homeRects[0]) homeRects[0].setAttribute('width', periodPx.toFixed(2));
+    if (homeRects[1]) homeRects[1].setAttribute('width', (periodPx / 2).toFixed(2));
+
+    homeValues.forEach((node) => { node.textContent = mtf.toFixed(2); });
+    homeFreqs.forEach((node) => {
+      node.textContent = Number.isInteger(frequency) ? String(frequency) : frequency.toFixed(1);
+    });
+    homePeriods.forEach((node) => { node.textContent = String(period); });
+  };
+
+  homeInput.addEventListener('input', renderHome);
+  renderHome();
 }

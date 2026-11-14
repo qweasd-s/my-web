@@ -1,92 +1,90 @@
-# Design System — Optical Instrument Console
+# Design System — Refract
 
 ## World
 
-A dark optical-instrument console: a live measurement surface, not a paper document. Graphite ground, fine white line work, cyan signal, amber measurement, red alert. The identity is a personnel module inside the console; the projects are modules in a manifest; the case pages are test benches.
+A sunlit optical bench. White plaster walls, a glazed window, one prism throwing a spectrum across a clear surface. Deep pool-blue ink on warm paper; measurement cards sit on the light like glass instrument panels. The pages are an engineer's bench, not a console or a marketing site.
 
-The previous warm manila “work order” world was rejected by the user as not technical enough. Do not reintroduce paper, manila, seals, stamps, or print metaphors.
+The theme is **Refract (glass / pool)** from [Nutlope/hallmark](https://github.com/Nutlope/hallmark). The prism is the only source of color; the spectrum stays inside the light and never becomes a border, a button, or a gradient headline.
 
 ## Principles
 
-- Technical detail is content, not decoration: axes, units, channels, readouts, tolerances, and the three measurement schematics.
-- Data and diagrams lead; chrome recedes. No cards, glows, gradients, glass, or ornamental grids.
-- One authored interaction moment at most; the case demos are the interactive core.
-- Functional text is legible: body 16px, labels 12px, chart annotations may be smaller inside SVG figures.
-- Illustrative values are labeled `SIM` / `示意数据`; no invented commercial claims.
+- One lit ground per page. The hero stage holds the generated light; the rest of the page is quiet paper.
+- Light is drawn, not blurred: a 2D canvas scene with a sun, glazing bars, caustic bands, a glass prism and a six-band spectrum fan.
+- Clear surfaces, not frosted ones. No backdrop blur, no glassmorphism, no colored glows.
+- Technical detail is content: line pairs, `f₀ = 1000 / p`, Imax/Imin, grid points, axes, channels, µm.
+- Illustrative values are labelled `演示` / `示意`; no invented commercial claims.
+- Sentence case; no tracked capitals, no mono-as-costume, no eyebrow chips, no hero metrics.
 
-## Color
+## Material and color
+
+Refract tokens live in OKLCH.
 
 | Token | Value | Role |
 | --- | --- | --- |
-| `--bg` | `#0a0d0f` | page ground |
-| `--panel` | `#0f1417` | primary panels |
-| `--panel-2` | `#0c1113` | schematic / demo sheets |
-| `--line` | `rgba(230,240,240,.14)` | 1px rules |
-| `--line-soft` | `rgba(230,240,240,.08)` | internal dividers |
-| `--text` | `#e6eef0` | primary text / line work |
-| `--muted` | `#93a2a6` | secondary text |
-| `--dim` | `#6f8085` | de-emphasized metadata / ticks |
-| `--cyan` | `#6fd5c5` | signal, links, measured values |
-| `--amber` | `#dfa55c` | secondary measurement value |
-| `--red` | `#ff6b4f` | alert / measurement marker |
+| `--color-paper` | `oklch(98.2% 0.006 95)` | page ground |
+| `--color-paper-2` | `oklch(96.4% 0.006 95)` | about band / stage base |
+| `--color-paper-3` | `oklch(93.6% 0.008 95)` | tracks and bars |
+| `--color-ink` | `oklch(23% 0.035 245)` | primary text and line work |
+| `--color-ink-2` | `oklch(36% 0.035 245)` | body copy |
+| `--color-muted` | `oklch(50% 0.025 240)` | secondary text |
+| `--color-rule` | `oklch(89.5% 0.008 230)` | 1px rules |
+| `--color-accent` | `oklch(50% 0.12 234)` | links, measured values, primary button |
+| `--color-accent-hi` | `oklch(44% 0.12 236)` | accent hover |
+| `--color-accent-soft` | `oklch(94% 0.025 220)` | row hover wash |
+| `--color-light` | `oklch(99.7% 0.004 95)` | clear card surface |
+| `--shadow-card` | tinted blue-grey, two layers | cards and nav |
+| `--shadow-cast` | wide tinted cast | lit stage |
 
-No colored glows, gradient text, glass, or decorative two-axis backgrounds. The page uses neutral panel shadows and 1px rules only.
+The spectrum (six bands in `light.js`) is reserved for the canvas. Never apply it to text, buttons, rules, or decorative borders.
 
 ## Type
 
 | Role | Face | Size / weight |
 | --- | --- | --- |
-| Name | Noto Sans SC | 68–102px / 900 |
-| Page title | Noto Sans SC | 44–68px / 900 |
-| Section title | Noto Sans SC | 30–38px / 900 |
-| Statement | Noto Sans SC | 21–28px / 500 |
-| Body | Noto Sans SC | 16px / 400 |
-| System labels | Archivo | 12px / 600–700, tracked caps |
-| Data / units / readings | IBM Plex Mono | 11–24px / 400 |
-| SVG annotations | Archivo / IBM Plex Mono | 11–14px inside figures |
+| Name | Funnel Display + Noto Sans SC | 76–116px / 400 |
+| Page title | Funnel Display + Noto Sans SC | 42–62px / 400 |
+| Section title | Funnel Display + Noto Sans SC | 30–52px / 300–400 |
+| Statement | Funnel Display + Noto Sans SC | 22–34px / 300 |
+| Body | Funnel Sans + Noto Sans SC | 15–17px / 400 |
+| UI labels | Funnel Sans + Noto Sans SC | 12–14px / 500 |
+| Readings | Funnel Display | 15–46px / 400, tabular numerals |
 
-The mono face is used for data, units, job IDs and readings only; labels use Archivo. Numerals are tabular where the face supports it.
+No mono face. No letter-spaced capitals. Units and numerals use tabular figures.
 
 ## Components
 
-- **System bar**: sticky, 54px, graphite, 1px rule; brand mark, system ID, ACTIVE status, email. On mobile: brand + status.
-- **Profile console**: panel with a 64×2px cyan top accent; name, Latin name, role, statement; a four-row spec table (DOMAIN / PRECISION / STATUS / BASE); email, COPY, VCARD.
-- **Optical schematic**: panel with header/footer rules; a 960×600 instrument drawing containing line-pair target, dual-path lens diagram, distortion grid, live-style readouts, a scale bar, and `SIMULATED DATA`.
-- **Work manifest**: a five-column table (MODULE / INPUT / OUTPUT / PRECISION / STATE); full-row links; schematic thumbnails; state is cyan `VIEW` or amber `INITIAL`.
-- **Case head**: panel with cyan top accent; project title, lead, four-cell facts row.
-- **Test bench**: panel with station label and simulated-data note; a dark stage, readout panel, profile chart, and monospace controls.
-- **Readout**: cyan measured value, mono subvalues, cyan progress bar, three-cell data list.
-- **Case body**: numbered measurement table and a definition-list specification table.
-- **Footer**: closing line, email, back-to-top, system metadata, legal fineprint.
+- **Nav pill**: fixed, floating, clear white; prism mark, name, three links, primary email button. Links collapse on mobile.
+- **Hero**: two columns; name / Latin name / role / statement / actions left; lit stage right.
+- **Lit stage**: rounded paper panel, tinted cast shadow, canvas light, clear card floating at its lower left. The card overlaps the light rather than sitting beside it.
+- **Measurement card**: clear surface, `演示` pill, line-pair or schematic stage, large accent reading, 2px bar, three-cell data list, controls.
+- **Project table**: five-column rows (project / input / output / precision / state); full-row links; hover accent-soft wash; the third row is marked `初版`.
+- **About band**: paper-2 ground, statement left, fact list right.
+- **Contact**: large display line, email / vCard / copy actions, confidentiality note.
+- **Case pages**: back link, title, lead, four-cell meta table; test card in the lit stage; numbered method and specs below; next-tool + email; footer.
+- **Footer**: copyright, role, email, back to top.
 
 ## Layout
 
-- System bar 54px; wrap 1280px.
-- Hero console: 4.8fr / 7.2fr; 18px gap; profile and schematic panels stretch together.
-- Manifest: full-width table; 1fr / 150 / 140 / 100 / 100 columns.
-- Case pages: 1280px wrap; case head; test bench; two-column case body.
-- Responsive: console stacks below 1080px; manifest rows become stacked records below 780px; facts and readout lists become single-column rows; schematic annotations remain inside the figure.
-- All interactive rows are full-row links; slider handles are 10×18px; focus rings are cyan.
+- Wrap 1240px; nav 960px; hero split `.92fr / 1.08fr`.
+- Case split `.9fr / 1.1fr`; stage min-height 720px; card width 540px.
+- Breakpoints: 1080px stacks the case hero and body; 760px collapses to one column and stacks readout lists; 420px tightens the hero.
+- No horizontal overflow at 320px; full-row links reflow rather than scroll.
 
 ## Motion
 
-- No page entrance animations. The console is static; the measurements are the live element.
-- Sliders update values instantly; bar widths transition 150ms.
-- Hover/focus color and arrow transitions 150ms.
-- `prefers-reduced-motion` removes transitions and smooth scrolling.
+- Canvas light runs at ~30fps, pauses off-screen, and draws one still frame under `prefers-reduced-motion`.
+- Sliders update readings instantly; bar widths transition 150ms.
+- Hover/focus transitions 150–200ms.
+- No entrance animations, no parallax, no scroll-jacking.
 
 ## Accessibility
 
-- Body text ≥4.5:1; large text ≥3:1; labels ≥12px. The muted and dim tones are tested against the dark panels.
-- Focus ring 2px cyan, offset 3px; full-row links use an inset ring.
-- Semantic landmarks; SVG figures have titles; decorative marks are aria-hidden.
-- Color is never the only state cue: labels, values, and state words are explicit.
-- Page works at 320px and 200% zoom; tables reflow rather than scroll horizontally.
+- Ink on paper and muted on paper meet body-text contrast; accent is used for values and links at ≥14px.
+- Focus ring 2px accent, offset 3px.
+- Semantic landmarks, skip link, labelled SVGs; the light canvas is aria-hidden.
+- Color is never the only cue: every state has a word (`演示`, `初版`, `清晰` / `离焦`).
+- Reduced motion removes transitions and freezes the light.
 
 ## Anti-patterns
 
-Do not reintroduce: manila/cream paper, stamps/seals/barcodes, dark colored glows, gradient text, glass, bento cards, eyebrow chips, numbered section kickers, tiny functional labels, decorative grid backgrounds, or unlabeled simulated data.
-
-## Detector note
-
-The Impeccable static detector is calibrated around a light page background for its contrast pass. On this dark console it reports low-contrast findings for light text as if it sat on white, plus a manifest padding advisory. The rendered contrast was checked directly; the remaining static findings are false positives, not ship blockers.
+Do not reintroduce: dark console / graphite grounds, cyan-and-amber signal palettes, manila work orders, stamps or barcodes, frosted glass, gradient text, colored glows, bento grids, eyebrow chips, tracked capitals, mono labels, or spectrum decorations outside the generated light.

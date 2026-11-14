@@ -1,5 +1,13 @@
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
+/* Refract palette — the same paper, ink and one blue the page is built on. */
+const INK = '#1d3145';
+const MUTED = '#6a7d86';
+const ACCENT = '#1e6b92';
+const PAPER = '#fbf8ef';
+const RULE = 'rgba(29,49,69,.2)';
+const LABEL_FONT = "'Funnel Sans', 'Noto Sans SC', ui-sans-serif, sans-serif";
+
 const svgNode = (name, attrs = {}) => {
   const node = document.createElementNS(SVG_NS, name);
   Object.entries(attrs).forEach(([key, value]) => node.setAttribute(key, value));
@@ -59,7 +67,7 @@ const initMtf = () => {
     linepair.style.setProperty('--blur-px', `${blurPx.toFixed(2)}px`);
 
     setAll('[data-period]', String(state.period));
-    setAll('[data-frequency]', String(Math.round(frequency)));
+    setAll('[data-frequency]', Number.isInteger(frequency) ? String(frequency) : frequency.toFixed(1));
     setAll('[data-mtf]', mtf.toFixed(2));
     setAll('[data-imax]', imax.toFixed(2));
     setAll('[data-imin]', imin.toFixed(2));
@@ -173,7 +181,7 @@ const initDistortion = () => {
           y1: CY - HALF_H,
           x2: x,
           y2: CY + HALF_H,
-          stroke: 'rgba(230,240,240,.22)',
+          stroke: RULE,
           'stroke-width': '1',
           'stroke-dasharray': '3 6',
         })
@@ -189,7 +197,7 @@ const initDistortion = () => {
           y1: y,
           x2: CX + HALF_W,
           y2: y,
-          stroke: 'rgba(230,240,240,.22)',
+          stroke: RULE,
           'stroke-width': '1',
           'stroke-dasharray': '3 6',
         })
@@ -203,7 +211,7 @@ const initDistortion = () => {
         const ny = (j / (ROWS - 1)) * 2 - 1;
         column.push(mapPoint(nx, ny));
       }
-      actual.appendChild(buildPolyline(column, '#e6eef0'));
+      actual.appendChild(buildPolyline(column, INK));
     }
 
     for (let j = 0; j < ROWS; j += 1) {
@@ -213,7 +221,7 @@ const initDistortion = () => {
         const ny = (j / (ROWS - 1)) * 2 - 1;
         row.push(mapPoint(nx, ny));
       }
-      actual.appendChild(buildPolyline(row, '#e6eef0'));
+      actual.appendChild(buildPolyline(row, INK));
     }
 
     for (let i = 0; i < COLS; i += 1) {
@@ -226,7 +234,7 @@ const initDistortion = () => {
             cx: x.toFixed(1),
             cy: y.toFixed(1),
             r: '1.8',
-            fill: '#6fd5c5',
+            fill: ACCENT,
           })
         );
       }
@@ -239,7 +247,7 @@ const initDistortion = () => {
         y1: CY + HALF_H,
         x2: cornerX,
         y2: cornerY,
-        stroke: '#ff6b4f',
+        stroke: ACCENT,
         'stroke-width': '1',
         'stroke-dasharray': '2 4',
       })
@@ -248,9 +256,17 @@ const initDistortion = () => {
       svgNode('circle', {
         cx: cornerX.toFixed(1),
         cy: cornerY.toFixed(1),
+        r: '6.5',
+        fill: PAPER,
+      })
+    );
+    highlight.appendChild(
+      svgNode('circle', {
+        cx: cornerX.toFixed(1),
+        cy: cornerY.toFixed(1),
         r: '4',
         fill: 'none',
-        stroke: '#ff6b4f',
+        stroke: ACCENT,
         'stroke-width': '1.2',
       })
     );
@@ -259,7 +275,7 @@ const initDistortion = () => {
         cx: cornerX.toFixed(1),
         cy: cornerY.toFixed(1),
         r: '2',
-        fill: '#ff6b4f',
+        fill: ACCENT,
       })
     );
 
@@ -270,7 +286,7 @@ const initDistortion = () => {
         y1: CY,
         x2: CX + 10,
         y2: CY,
-        stroke: 'rgba(230,240,240,.3)',
+        stroke: RULE,
         'stroke-width': '1',
       })
     );
@@ -280,7 +296,7 @@ const initDistortion = () => {
         y1: CY - 10,
         x2: CX,
         y2: CY + 10,
-        stroke: 'rgba(230,240,240,.3)',
+        stroke: RULE,
         'stroke-width': '1',
       })
     );
@@ -336,9 +352,9 @@ const initDecentration = () => {
         y1: 50,
         x2: CX,
         y2: 370,
-        stroke: 'rgba(230,240,240,.3)',
+        stroke: 'rgba(29,49,69,.32)',
         'stroke-width': '1',
-        'stroke-dasharray': '4 6',
+        'stroke-dasharray': '5 5',
       })
     );
 
@@ -348,17 +364,31 @@ const initDecentration = () => {
         y1: 50,
         x2: lensX,
         y2: 370,
-        stroke: '#6fd5c5',
-        'stroke-width': '1.2',
+        stroke: ACCENT,
+        'stroke-width': '1.6',
       })
     );
 
     group.appendChild(
       svgNode('path', {
         d: `M${lensX} 80 Q${lensX - 82} 170 ${lensX} 260 Q${lensX + 82} 170 ${lensX} 80 Z`,
-        fill: '#0a0d0f',
-        stroke: '#e6eef0',
-        'stroke-width': '1.4',
+        fill: 'rgba(30,107,146,.09)',
+        stroke: INK,
+        'stroke-width': '1.6',
+      })
+    );
+
+    // The optical axis reads through the glass.
+    group.appendChild(
+      svgNode('line', {
+        x1: lensX,
+        y1: 92,
+        x2: lensX,
+        y2: 252,
+        stroke: ACCENT,
+        'stroke-width': '1.1',
+        'stroke-dasharray': '3 6',
+        opacity: '.55',
       })
     );
 
@@ -368,8 +398,8 @@ const initDecentration = () => {
         y1: SENSOR_Y,
         x2: 640,
         y2: SENSOR_Y,
-        stroke: '#e6eef0',
-        'stroke-width': '1',
+        stroke: INK,
+        'stroke-width': '1.4',
       })
     );
 
@@ -380,7 +410,7 @@ const initDecentration = () => {
           y1: SENSOR_Y,
           x2: x,
           y2: SENSOR_Y + 6,
-          stroke: '#e6eef0',
+          stroke: INK,
           'stroke-width': '1',
         })
       );
@@ -390,16 +420,16 @@ const initDecentration = () => {
       svgNode('path', {
         d: `M100 80 L${lensX - 70} 160 L${lensX} ${SENSOR_Y}`,
         fill: 'none',
-        stroke: '#e6eef0',
-        'stroke-width': '1',
+        stroke: 'rgba(29,49,69,.55)',
+        'stroke-width': '1.2',
       })
     );
     group.appendChild(
       svgNode('path', {
         d: `M620 80 L${lensX + 70} 160 L${lensX} ${SENSOR_Y}`,
         fill: 'none',
-        stroke: '#e6eef0',
-        'stroke-width': '1',
+        stroke: 'rgba(29,49,69,.55)',
+        'stroke-width': '1.2',
       })
     );
 
@@ -407,8 +437,16 @@ const initDecentration = () => {
       svgNode('circle', {
         cx: lensX,
         cy: SENSOR_Y,
-        r: '3.2',
-        fill: '#ff6b4f',
+        r: '6',
+        fill: PAPER,
+      })
+    );
+    group.appendChild(
+      svgNode('circle', {
+        cx: lensX,
+        cy: SENSOR_Y,
+        r: '3.4',
+        fill: ACCENT,
       })
     );
 
@@ -419,7 +457,7 @@ const initDecentration = () => {
         y1: dimY,
         x2: lensX,
         y2: dimY,
-        stroke: '#93a2a6',
+        stroke: MUTED,
         'stroke-width': '1',
       })
     );
@@ -430,32 +468,31 @@ const initDecentration = () => {
           y1: dimY - 4,
           x2: x,
           y2: dimY + 4,
-          stroke: '#93a2a6',
+          stroke: MUTED,
           'stroke-width': '1',
         })
       );
     });
 
-    const label = (x, y, text, fill, anchor = 'start', size = '10', family = "'IBM Plex Mono', monospace") => {
+    const label = (x, y, text, fill, anchor = 'start', size = '16') => {
       const node = svgNode('text', {
         x,
         y,
         fill,
-        'font-family': family,
+        'font-family': LABEL_FONT,
         'font-size': size,
         'text-anchor': anchor,
-        'letter-spacing': '.5',
       });
       node.textContent = text;
       return node;
     };
 
-    group.appendChild(label(CX - 10, 42, '机械轴', '#93a2a6', 'end', '10', 'sans-serif'));
-    group.appendChild(label(lensX + 10, 42, '光轴', '#6fd5c5', 'start', '10', 'sans-serif'));
-    group.appendChild(label(CX, dimY + 18, 'Δ', '#93a2a6', 'middle'));
-    group.appendChild(label(640, SENSOR_Y + 20, 'SENSOR', '#93a2a6', 'end', '9'));
-    group.appendChild(label(104, 72, 'CH A', '#6fd5c5', 'start', '9'));
-    group.appendChild(label(616, 72, 'CH B', '#6fd5c5', 'end', '9'));
+    group.appendChild(label(CX - 10, 42, '机械轴', MUTED, 'end', '18'));
+    group.appendChild(label(lensX + 10, 42, '光轴', ACCENT, 'start', '18'));
+    group.appendChild(label(CX, dimY + 18, 'Δ', MUTED, 'middle', '16'));
+    group.appendChild(label(636, SENSOR_Y + 20, '传感器', MUTED, 'end', '15'));
+    group.appendChild(label(104, 72, '通道 A', ACCENT, 'start', '15'));
+    group.appendChild(label(616, 72, '通道 B', ACCENT, 'end', '15'));
 
     plot.replaceChildren(group);
 
