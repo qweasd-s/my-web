@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>刘东琦 — AI 软件开发工程师</title>
-  <meta name="description" content="刘东琦，AI 软件开发工程师。把 MTF、畸变与双光路偏心测量做成可用的软件，精度以 µm 计。">
+  <meta name="description" content="刘东琦，AI 软件开发工程师。用 MATLAB、Python 与 Qt 把 MTF、十字靶畸变和偏心测量做成可交付的软件，精度以 µm 计。">
   <meta name="theme-color" content="#faf7ef">
   <meta property="og:title" content="刘东琦 — AI 软件开发工程师">
   <meta property="og:description" content="在镜片与代码之间，做测量光的软件。">
@@ -21,8 +21,8 @@
       "alternateName": "Liu Dongqi",
       "jobTitle": "AI 软件开发工程师",
       "email": "mailto:2823641678@qq.com",
-      "description": "AI 软件开发工程师，在光学镜片行业从事单频线对图 MTF、图像畸变解算与双光路偏心测量软件的开发。",
-      "knowsAbout": ["AI 软件开发", "光学测量", "MTF", "畸变分析", "双光路偏心测量"]
+      "description": "AI 软件开发工程师，在光学镜片行业从事 MTF 批量计算、十字靶畸变解算与反射式偏心测量软件的开发。",
+      "knowsAbout": ["AI 软件开发", "光学测量", "MATLAB", "Python", "OpenCV", "PySide6", "MTF", "畸变分析", "偏心测量"]
     }
   </script>
 </head>
@@ -70,7 +70,7 @@
 
           <div class="measure-card clear">
             <div class="measure-card__head">
-              <span class="measure-card__title">MTF / 单频线对</span>
+              <span class="measure-card__title">MTF / 单目标线对</span>
               <span class="pill pill--soft">演示</span>
             </div>
 
@@ -106,7 +106,7 @@
       <div class="wrap">
         <header class="section-head">
           <h2 id="work-title">三个工具，<br>一套测量方法。</h2>
-          <p>从单频线对图、拍摄图像的畸变解算，到双光路偏心测量。输入不同，输出都是 µm 级的可比较数据。</p>
+          <p>从批量线对图的 MTF，到十字靶图的 O1/O2 定位，再到反射十字轨迹的偏心测量。输入不同，输出都是 µm 级的可比较数据。</p>
         </header>
 
         <div class="project-table" role="list">
@@ -121,10 +121,10 @@
           <a class="project" href="work/mtf.html" role="listitem">
             <span class="project__main">
               <span class="project__num">01</span>
-              <span><b>MTF 计算软件</b><small>单一空间频率的线对图</small></span>
+              <span><b>MTF 计算软件</b><small>批量线对图 → MTF + 质量状态</small></span>
             </span>
-            <span class="project__cell" data-label="输入">线对图</span>
-            <span class="project__cell" data-label="输出">MTF @ f₀</span>
+            <span class="project__cell" data-label="输入">线对图组</span>
+            <span class="project__cell" data-label="输出">MTF + 质量</span>
             <span class="project__cell" data-label="精度">µm 级</span>
             <span class="pill pill--go">查看案例 <span aria-hidden="true">→</span></span>
           </a>
@@ -132,10 +132,10 @@
           <a class="project" href="work/distortion.html" role="listitem">
             <span class="project__main">
               <span class="project__num">02</span>
-              <span><b>畸变计算软件</b><small>从拍摄图像解算畸变值</small></span>
+              <span><b>畸变计算软件</b><small>十字靶图 → O1/O2 → 残差</small></span>
             </span>
-            <span class="project__cell" data-label="输入">拍摄图像</span>
-            <span class="project__cell" data-label="输出">畸变值</span>
+            <span class="project__cell" data-label="输入">十字靶图</span>
+            <span class="project__cell" data-label="输出">畸变残差</span>
             <span class="project__cell" data-label="精度">µm 级</span>
             <span class="pill pill--go">查看案例 <span aria-hidden="true">→</span></span>
           </a>
@@ -143,10 +143,10 @@
           <a class="project" href="work/decentration.html" role="listitem">
             <span class="project__main">
               <span class="project__num">03</span>
-              <span><b>双光路偏心仪软件</b><small>双光路测量镜片中心</small></span>
+              <span><b>双光路偏心仪软件</b><small>反射十字轨迹 → 圆拟合</small></span>
             </span>
-            <span class="project__cell" data-label="输入">双光路图像</span>
-            <span class="project__cell" data-label="输出">偏心量 Δ</span>
+            <span class="project__cell" data-label="输入">十字像 / 轨迹</span>
+            <span class="project__cell" data-label="输出">线 / 角偏心</span>
             <span class="project__cell" data-label="精度">µm 级</span>
             <span class="pill pill--muted">初版</span>
           </a>
@@ -158,7 +158,7 @@
       <div class="wrap about__grid">
         <div class="about__copy">
           <h2 id="about-title">在光学与软件之间。</h2>
-          <p>我在一家光学镜片公司做 AI 软件开发。日常是把 MTF、畸变、偏心这些测量，做成工程师真的会用的软件。</p>
+          <p>我在一家光学镜片公司做 AI 软件开发。日常用 MATLAB、Python 和 Qt，把 MTF、畸变、偏心这些测量做成工程师真的会用的软件。</p>
           <p>三个工具都从同一件事出发：把光学结果变成可读、可比较的数据。精度以 µm 计。</p>
         </div>
         <dl class="fact-list">

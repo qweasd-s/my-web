@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>MTF 计算软件 — 刘东琦</title>
-  <meta name="description" content="单频线对图 MTF 计算演示：采集固定空间频率的线对图，读取亮暗条纹的亮度极值，计算该频率下的 MTF。">
+  <meta name="description" content="MATLAB 批量 MTF 计算：读取明场、暗场与检测图，自动定位四方向线对，输出 MTF、质量状态与 Excel / MAT 报表。">
   <meta name="theme-color" content="#faf7ef">
   <link rel="icon" href="../favicon.svg" type="image/svg+xml">
   <link rel="preload" href="../assets/fonts/noto-sans-sc.woff2" as="font" type="font/woff2" crossorigin>
@@ -40,12 +40,12 @@
         <div class="case-hero__copy">
           <a class="back-link" href="../index.html#work">← 三个工具</a>
           <h1 id="case-title">MTF 计算软件</h1>
-          <p class="case-lead">在单一空间频率下，把线对图的对比度变成 MTF。</p>
+          <p class="case-lead">批量读取明场、暗场与检测图，<br>输出 MTF、质量状态和可复核的报表。</p>
           <dl class="case-meta">
-            <div><dt>输入</dt><dd>单频线对图</dd></div>
-            <div><dt>输出</dt><dd>MTF @ f₀</dd></div>
+            <div><dt>输入</dt><dd>明场 / 暗场 / 检测图</dd></div>
+            <div><dt>输出</dt><dd>MTF · Excel / MAT</dd></div>
             <div><dt>精度</dt><dd>µm 级</dd></div>
-            <div><dt>方式</dt><dd>单频测量</dd></div>
+            <div><dt>模式</dt><dd>成像 / 场曲 · 四方向</dd></div>
           </dl>
         </div>
 
@@ -70,8 +70,8 @@
               </svg>
               <div class="mtf-scan" aria-hidden="true"></div>
               <div class="stage-hud">
-                <span>单频线对 / f₀</span>
-                <span>传感器视图</span>
+                <span>单目标线对 / H</span>
+                <span>ROI 自动定位</span>
               </div>
               <div class="stage-hud stage-hud--bottom">
                 <span>周期 <b data-period>20</b> µm</span>
@@ -81,7 +81,7 @@
 
             <div class="readout">
               <div class="readout__head">
-                <span class="readout__label">MTF @ f₀ · 示意</span>
+                <span class="readout__label">MTF @ f₀ · 单目标</span>
                 <span class="readout__sub"><span data-frequency>50</span> lp/mm</span>
               </div>
               <div class="readout__main">
@@ -92,12 +92,12 @@
               <dl class="readout__list">
                 <div><dt>Imax</dt><dd data-imax>0.89</dd></div>
                 <div><dt>Imin</dt><dd data-imin>0.11</dd></div>
-                <div><dt>精度</dt><dd>µm 级</dd></div>
+                <div><dt>质量</dt><dd data-mtf-quality>正常</dd></div>
               </dl>
             </div>
 
             <div class="profile">
-              <div class="profile__head"><span>亮度剖面</span><span>Imax / Imin</span></div>
+              <div class="profile__head"><span>亮度剖面</span><span>Michelson <b data-michelson>0.73</b></span></div>
               <svg data-profile viewBox="0 0 900 150" preserveAspectRatio="none" aria-hidden="true">
                 <line data-imax-line x1="0" y1="30" x2="900" y2="30" stroke="#c9d3d4" stroke-dasharray="3 6"/>
                 <line data-imin-line x1="0" y1="120" x2="900" y2="120" stroke="#c9d3d4" stroke-dasharray="3 6"/>
@@ -125,27 +125,34 @@
     <section class="case-body" aria-labelledby="method-title">
       <div class="wrap case-body__grid">
         <section class="method">
-          <h2 id="method-title">测量方法</h2>
+          <h2 id="method-title">测量流程</h2>
           <ol class="steps">
             <li>
               <span>01</span>
               <div>
-                <b>采集单频线对图</b>
-                <p>在固定空间频率 f₀ 下拍摄线对图，得到清晰的亮暗条纹。</p>
+                <b>批量读取三组图</b>
+                <p>明场、暗场、检测图按点位编号匹配；支持完整原图与单元裁剪图，不写死分辨率。</p>
               </div>
             </li>
             <li>
               <span>02</span>
               <div>
-                <b>读取亮度极值</b>
-                <p>沿采样线提取亮条纹 Imax 与暗条纹 Imin，得到该频率下的对比度。</p>
+                <b>自动定位目标与 ROI</b>
+                <p>合并连通区域、估计整体旋转，按梯度方向识别 H、V、±45° 四组线对，并排除条纹端头与背景。</p>
               </div>
             </li>
             <li>
               <span>03</span>
               <div>
-                <b>计算该频率的 MTF</b>
-                <p>MTF = (Imax − Imin) / (Imax + Imin)，结果与 µm 级几何量关联。</p>
+                <b>计算 MTF 与质量</b>
+                <p>估频、邻域频率扫描与线性谐波求解；NRMSE 超限时保留结果并标记，另附 Michelson 对比度校核。</p>
+              </div>
+            </li>
+            <li>
+              <span>04</span>
+              <div>
+                <b>输出报表</b>
+                <p>结果写入 Excel 和 MAT，带上质量状态与逐点明细；双目标按侧隔离，一侧失败不影响另一侧。</p>
               </div>
             </li>
           </ol>
@@ -154,12 +161,13 @@
         <aside class="specs">
           <h2>规格</h2>
           <dl>
-            <div><dt>输入</dt><dd>单频线对图</dd></div>
-            <div><dt>输出</dt><dd>MTF @ f₀</dd></div>
-            <div><dt>频率</dt><dd>lp/mm</dd></div>
+            <div><dt>输入</dt><dd>明场 / 暗场 / 检测图</dd></div>
+            <div><dt>输出</dt><dd>Excel / MAT</dd></div>
+            <div><dt>模式</dt><dd>成像 / 场曲 · 四方向</dd></div>
+            <div><dt>环境</dt><dd>MATLAB R2022a+</dd></div>
             <div><dt>精度</dt><dd>µm 级</dd></div>
           </dl>
-          <p class="note">线对周期 p（µm）与空间频率 f₀（lp/mm）满足 f₀ = 1000 / p。演示数值为模拟数据，用于说明测量流程；真实精度与结果以软件输出为准。</p>
+          <p class="note">演示是单目标线对的简化交互；实际软件以 MATLAB 批量运行。线对周期 p（µm）与空间频率 f₀（lp/mm）满足 f₀ = 1000 / p。演示数值为模拟数据，真实结果以软件输出为准。</p>
         </aside>
       </div>
     </section>

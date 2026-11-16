@@ -71,6 +71,8 @@ const initMtf = () => {
     setAll('[data-mtf]', mtf.toFixed(2));
     setAll('[data-imax]', imax.toFixed(2));
     setAll('[data-imin]', imin.toFixed(2));
+    setAll('[data-michelson]', mtf.toFixed(2));
+    setAll('[data-mtf-quality]', state.focus < 25 ? '正常' : state.focus < 60 ? '关注' : '失效');
 
     if (bar) bar.style.width = `${Math.round(mtf * 100)}%`;
 
@@ -120,205 +122,160 @@ const initMtf = () => {
 };
 
 /* ------------------------------------------------------------------
-   02 / Distortion — captured grid to model fit
+   02 / Distortion — cross target O1/O2 and residual
    ------------------------------------------------------------------ */
 
 const initDistortion = () => {
   const svg = document.querySelector('[data-dist-svg]');
   const plot = svg ? svg.querySelector('[data-dist-plot]') : null;
-  const input = document.querySelector('[data-dist-input]');
-  const pointsToggle = document.querySelector('[data-dist-points]');
+  const diffInput = document.querySelector('[data-dist-diff]');
+  const lineToggle = document.querySelector('[data-dist-centerlines]');
   const bar = document.querySelector('[data-dist-bar]');
 
-  if (!svg || !plot || !input) return;
+  if (!svg || !plot) return;
 
-  const W = 720;
-  const H = 460;
-  const CX = W / 2;
-  const CY = H / 2;
-  const HALF_W = 245;
-  const HALF_H = 150;
-  const COLS = 9;
-  const ROWS = 7;
   const state = {
-    k: Number(input.value),
-    showPoints: pointsToggle ? pointsToggle.checked : true,
+    diff: diffInput ? Number(diffInput.value) : 0.12,
+    showLines: lineToggle ? lineToggle.checked : true,
   };
 
-  const mapPoint = (nx, ny) => {
-    const radius2 = nx * nx + ny * ny;
-    const factor = 1 + state.k * radius2;
-    return [CX + nx * HALF_W * factor, CY + ny * HALF_H * factor];
-  };
-
-  const buildPolyline = (points, stroke, dash = '') => {
-    const polyline = svgNode('polyline', {
-      fill: 'none',
-      stroke,
-      'stroke-width': '1.15',
-      'stroke-linejoin': 'round',
-      points: points.map(([x, y]) => `${x.toFixed(1)},${y.toFixed(1)}`).join(' '),
+  const label = (x, y, text, fill, anchor = 'start', size = '16') => {
+    const node = svgNode('text', {
+      x,
+      y,
+      fill,
+      'font-family': LABEL_FONT,
+      'font-size': size,
+      'text-anchor': anchor,
     });
-    if (dash) polyline.setAttribute('stroke-dasharray', dash);
-    return polyline;
+    node.textContent = text;
+    return node;
   };
 
   const render = () => {
-    const ideal = svgNode('g', { opacity: '0.7' });
-    const actual = svgNode('g');
-    const points = svgNode('g', {
-      opacity: state.showPoints ? '1' : '0',
-      'data-dist-points-group': '',
+    const group = svgNode('g');
+
+    group.appendChild(
+      svgNode('rect', {
+        x: '36',
+        y: '36',
+        width: '648',
+        height: '388',
+        rx: '10',
+        fill: 'none',
+        stroke: 'rgba(29,49,69,.08)',
+      })
+    );
+
+    const bars = [
+      [290, 80, 20, 170],
+      [210, 180, 155, 20],
+      [420, 210, 20, 170],
+      [365, 260, 155, 20],
+    ];
+    bars.forEach(([x, y, w, h]) => {
+      group.appendChild(svgNode('rect', { x, y, width: w, height: h, fill: 'rgba(29,49,69,.82)' }));
     });
-    const highlight = svgNode('g');
 
-    for (let i = 0; i < COLS; i += 1) {
-      const nx = (i / (COLS - 1)) * 2 - 1;
-      const x = CX + nx * HALF_W;
-      ideal.appendChild(
-        svgNode('line', {
-          x1: x,
-          y1: CY - HALF_H,
-          x2: x,
-          y2: CY + HALF_H,
-          stroke: RULE,
-          'stroke-width': '1',
-          'stroke-dasharray': '3 6',
-        })
-      );
-    }
-
-    for (let j = 0; j < ROWS; j += 1) {
-      const ny = (j / (ROWS - 1)) * 2 - 1;
-      const y = CY + ny * HALF_H;
-      ideal.appendChild(
-        svgNode('line', {
-          x1: CX - HALF_W,
-          y1: y,
-          x2: CX + HALF_W,
-          y2: y,
-          stroke: RULE,
-          'stroke-width': '1',
-          'stroke-dasharray': '3 6',
-        })
-      );
-    }
-
-    for (let i = 0; i < COLS; i += 1) {
-      const column = [];
-      for (let j = 0; j < ROWS; j += 1) {
-        const nx = (i / (COLS - 1)) * 2 - 1;
-        const ny = (j / (ROWS - 1)) * 2 - 1;
-        column.push(mapPoint(nx, ny));
-      }
-      actual.appendChild(buildPolyline(column, INK));
-    }
-
-    for (let j = 0; j < ROWS; j += 1) {
-      const row = [];
-      for (let i = 0; i < COLS; i += 1) {
-        const nx = (i / (COLS - 1)) * 2 - 1;
-        const ny = (j / (ROWS - 1)) * 2 - 1;
-        row.push(mapPoint(nx, ny));
-      }
-      actual.appendChild(buildPolyline(row, INK));
-    }
-
-    for (let i = 0; i < COLS; i += 1) {
-      for (let j = 0; j < ROWS; j += 1) {
-        const nx = (i / (COLS - 1)) * 2 - 1;
-        const ny = (j / (ROWS - 1)) * 2 - 1;
-        const [x, y] = mapPoint(nx, ny);
-        points.appendChild(
-          svgNode('circle', {
-            cx: x.toFixed(1),
-            cy: y.toFixed(1),
-            r: '1.8',
-            fill: ACCENT,
+    if (state.showLines) {
+      const lines = [
+        [300, 64, 300, 310],
+        [194, 190, 381, 190],
+        [430, 194, 430, 396],
+        [349, 270, 536, 270],
+      ];
+      lines.forEach(([x1, y1, x2, y2]) => {
+        group.appendChild(
+          svgNode('line', {
+            x1,
+            y1,
+            x2,
+            y2,
+            stroke: ACCENT,
+            'stroke-width': '1.1',
+            'stroke-dasharray': '4 6',
+            opacity: '.75',
           })
         );
-      }
+      });
     }
 
-    const [cornerX, cornerY] = mapPoint(1, 1);
-    highlight.appendChild(
+    group.appendChild(
       svgNode('line', {
-        x1: CX + HALF_W,
-        y1: CY + HALF_H,
-        x2: cornerX,
-        y2: cornerY,
+        x1: '300',
+        y1: '190',
+        x2: '430',
+        y2: '270',
         stroke: ACCENT,
         'stroke-width': '1',
-        'stroke-dasharray': '2 4',
+        'stroke-dasharray': '2 5',
+        opacity: '.5',
       })
     );
-    highlight.appendChild(
+    group.appendChild(label(346, 248, 'dx / dy', MUTED, 'start', '15'));
+
+    const centres = [
+      [300, 190, 'O1', 314, 174],
+      [430, 270, 'O2', 444, 254],
+    ];
+    centres.forEach(([x, y, name, tx, ty]) => {
+      group.appendChild(svgNode('circle', { cx: x, cy: y, r: '8', fill: PAPER }));
+      group.appendChild(svgNode('circle', { cx: x, cy: y, r: '4', fill: ACCENT }));
+      group.appendChild(label(tx, ty, name, ACCENT, 'start', '18'));
+    });
+
+    // Residual map inset: one point inside the tolerance ring.
+    const rx = 580;
+    const ry = 345;
+    const rr = 46;
+    group.appendChild(
       svgNode('circle', {
-        cx: cornerX.toFixed(1),
-        cy: cornerY.toFixed(1),
-        r: '6.5',
-        fill: PAPER,
-      })
-    );
-    highlight.appendChild(
-      svgNode('circle', {
-        cx: cornerX.toFixed(1),
-        cy: cornerY.toFixed(1),
-        r: '4',
+        cx: rx,
+        cy: ry,
+        r: rr,
         fill: 'none',
-        stroke: ACCENT,
-        'stroke-width': '1.2',
-      })
-    );
-    highlight.appendChild(
-      svgNode('circle', {
-        cx: cornerX.toFixed(1),
-        cy: cornerY.toFixed(1),
-        r: '2',
-        fill: ACCENT,
-      })
-    );
-
-    const centre = svgNode('g', { opacity: '0.8' });
-    centre.appendChild(
-      svgNode('line', {
-        x1: CX - 10,
-        y1: CY,
-        x2: CX + 10,
-        y2: CY,
         stroke: RULE,
         'stroke-width': '1',
+        'stroke-dasharray': '4 5',
       })
     );
-    centre.appendChild(
-      svgNode('line', {
-        x1: CX,
-        y1: CY - 10,
-        x2: CX,
-        y2: CY + 10,
-        stroke: RULE,
-        'stroke-width': '1',
-      })
+    group.appendChild(
+      svgNode('circle', { cx: rx, cy: ry, r: rr * 0.54, fill: 'none', stroke: RULE, 'stroke-width': '1' })
     );
+    group.appendChild(svgNode('line', { x1: rx - rr - 8, y1: ry, x2: rx + rr + 8, y2: ry, stroke: RULE, 'stroke-width': '1' }));
+    group.appendChild(svgNode('line', { x1: rx, y1: ry - rr - 8, x2: rx, y2: ry + rr + 8, stroke: RULE, 'stroke-width': '1' }));
+    const px = rx + rr * 0.42;
+    const py = ry - rr * 0.2;
+    group.appendChild(svgNode('line', { x1: rx, y1: ry, x2: px, y2: py, stroke: ACCENT, 'stroke-width': '1' }));
+    group.appendChild(svgNode('circle', { cx: px, cy: py, r: '6', fill: PAPER }));
+    group.appendChild(svgNode('circle', { cx: px, cy: py, r: '3', fill: ACCENT }));
+    group.appendChild(label(rx - rr, ry - rr - 10, '残差图', MUTED, 'start', '18'));
 
-    plot.replaceChildren(ideal, actual, points, highlight, centre);
+    plot.replaceChildren(group);
 
-    const kText = state.k.toFixed(2).replace('-', '−');
-    const delta = Math.round(Math.abs(state.k) * 100);
+    const residual = 0.22 + state.diff * 0.55;
+    const dx = 12.4 + state.diff * 0.6;
+    const dy = -3.1 + state.diff * 0.3;
+    const status = state.diff < 0.2 ? '正常' : state.diff <= 0.5 ? '关注' : '回退梯度';
 
-    setAll('[data-dist-k]', kText);
-    setAll('[data-dist-delta]', String(delta));
-    if (bar) bar.style.width = `${Math.min(100, Math.round((Math.abs(state.k) / 0.3) * 100))}%`;
+    setAll('[data-dist-residual]', residual.toFixed(2));
+    setAll('[data-dist-dx]', `${dx.toFixed(1)} µm`);
+    setAll('[data-dist-dy]', `${dy.toFixed(1).replace('-', '−')} µm`);
+    setAll('[data-dist-status]', status);
+    setAll('[data-dist-diff-label]', `${state.diff.toFixed(2)} px`);
+    if (bar) bar.style.width = `${Math.min(100, Math.round((residual / 0.6) * 100))}%`;
   };
 
-  input.addEventListener('input', (event) => {
-    state.k = Number(event.target.value);
-    render();
-  });
+  if (diffInput) {
+    diffInput.addEventListener('input', (event) => {
+      state.diff = Number(event.target.value);
+      render();
+    });
+  }
 
-  if (pointsToggle) {
-    pointsToggle.addEventListener('change', (event) => {
-      state.showPoints = event.target.checked;
+  if (lineToggle) {
+    lineToggle.addEventListener('change', (event) => {
+      state.showLines = event.target.checked;
       render();
     });
   }
@@ -327,184 +284,155 @@ const initDistortion = () => {
 };
 
 /* ------------------------------------------------------------------
-   03 / Decentration — dual-path offset
+   03 / Decentration — reflective crosshair trajectory
    ------------------------------------------------------------------ */
 
 const initDecentration = () => {
   const svg = document.querySelector('[data-dec-svg]');
   const plot = svg ? svg.querySelector('[data-dec-plot]') : null;
   const input = document.querySelector('[data-dec-input]');
+  const angleInput = document.querySelector('[data-dec-angle-input]');
   const bar = document.querySelector('[data-dec-bar]');
 
-  if (!svg || !plot || !input) return;
+  if (!svg || !plot) return;
 
   const CX = 360;
-  const SENSOR_Y = 310;
-  const state = { offset: Number(input.value) || 0 };
+  const CY = 230;
+  const R_MM = 50;
+  const state = {
+    eccentricity: input ? Number(input.value) || 0 : 12,
+    angle: angleInput ? Number(angleInput.value) || 0 : 300,
+  };
+
+  const label = (x, y, text, fill, anchor = 'start', size = '16') => {
+    const node = svgNode('text', {
+      x,
+      y,
+      fill,
+      'font-family': LABEL_FONT,
+      'font-size': size,
+      'text-anchor': anchor,
+    });
+    node.textContent = text;
+    return node;
+  };
+
+  const addCross = (group, x, y, size, stroke, opacity, width) => {
+    group.appendChild(
+      svgNode('line', { x1: x - size, y1: y, x2: x + size, y2: y, stroke, 'stroke-width': width, opacity })
+    );
+    group.appendChild(
+      svgNode('line', { x1: x, y1: y - size, x2: x, y2: y + size, stroke, 'stroke-width': width, opacity })
+    );
+  };
 
   const render = () => {
-    const lensX = CX + state.offset * 1.7;
+    const radius = 190 * Math.sqrt(state.eccentricity / 50);
+    const theta = (state.angle - 90) * (Math.PI / 180);
+    const x = CX + Math.cos(theta) * radius;
+    const y = CY + Math.sin(theta) * radius;
     const group = svgNode('g');
 
     group.appendChild(
       svgNode('line', {
+        x1: CX - 200,
+        y1: CY,
+        x2: CX + 200,
+        y2: CY,
+        stroke: 'rgba(29,49,69,.08)',
+        'stroke-width': '1',
+      })
+    );
+    group.appendChild(
+      svgNode('line', {
         x1: CX,
-        y1: 50,
+        y1: CY - 200,
         x2: CX,
-        y2: 370,
-        stroke: 'rgba(29,49,69,.32)',
+        y2: CY + 200,
+        stroke: 'rgba(29,49,69,.08)',
         'stroke-width': '1',
-        'stroke-dasharray': '5 5',
       })
     );
 
     group.appendChild(
-      svgNode('line', {
-        x1: lensX,
-        y1: 50,
-        x2: lensX,
-        y2: 370,
+      svgNode('circle', {
+        cx: CX,
+        cy: CY,
+        r: radius.toFixed(1),
+        fill: 'none',
         stroke: ACCENT,
-        'stroke-width': '1.6',
-      })
-    );
-
-    group.appendChild(
-      svgNode('path', {
-        d: `M${lensX} 80 Q${lensX - 82} 170 ${lensX} 260 Q${lensX + 82} 170 ${lensX} 80 Z`,
-        fill: 'rgba(30,107,146,.09)',
-        stroke: INK,
-        'stroke-width': '1.6',
-      })
-    );
-
-    // The optical axis reads through the glass.
-    group.appendChild(
-      svgNode('line', {
-        x1: lensX,
-        y1: 92,
-        x2: lensX,
-        y2: 252,
-        stroke: ACCENT,
-        'stroke-width': '1.1',
-        'stroke-dasharray': '3 6',
-        opacity: '.55',
-      })
-    );
-
-    group.appendChild(
-      svgNode('line', {
-        x1: 80,
-        y1: SENSOR_Y,
-        x2: 640,
-        y2: SENSOR_Y,
-        stroke: INK,
         'stroke-width': '1.4',
+        'stroke-dasharray': '5 7',
+        opacity: '.8',
       })
     );
 
-    for (let x = 80; x <= 640; x += 80) {
-      group.appendChild(
-        svgNode('line', {
-          x1: x,
-          y1: SENSOR_Y,
-          x2: x,
-          y2: SENSOR_Y + 6,
-          stroke: INK,
-          'stroke-width': '1',
-        })
-      );
-    }
-
-    group.appendChild(
-      svgNode('path', {
-        d: `M100 80 L${lensX - 70} 160 L${lensX} ${SENSOR_Y}`,
-        fill: 'none',
-        stroke: 'rgba(29,49,69,.55)',
-        'stroke-width': '1.2',
-      })
-    );
-    group.appendChild(
-      svgNode('path', {
-        d: `M620 80 L${lensX + 70} 160 L${lensX} ${SENSOR_Y}`,
-        fill: 'none',
-        stroke: 'rgba(29,49,69,.55)',
-        'stroke-width': '1.2',
-      })
-    );
-
-    group.appendChild(
-      svgNode('circle', {
-        cx: lensX,
-        cy: SENSOR_Y,
-        r: '6',
-        fill: PAPER,
-      })
-    );
-    group.appendChild(
-      svgNode('circle', {
-        cx: lensX,
-        cy: SENSOR_Y,
-        r: '3.4',
-        fill: ACCENT,
-      })
-    );
-
-    const dimY = 342;
-    group.appendChild(
-      svgNode('line', {
-        x1: CX,
-        y1: dimY,
-        x2: lensX,
-        y2: dimY,
-        stroke: MUTED,
-        'stroke-width': '1',
-      })
-    );
-    [CX, lensX].forEach((x) => {
-      group.appendChild(
-        svgNode('line', {
-          x1: x,
-          y1: dimY - 4,
-          x2: x,
-          y2: dimY + 4,
-          stroke: MUTED,
-          'stroke-width': '1',
-        })
+    [120, 240].forEach((delta) => {
+      const a = theta - delta * (Math.PI / 180);
+      addCross(
+        group,
+        CX + Math.cos(a) * radius,
+        CY + Math.sin(a) * radius,
+        26,
+        MUTED,
+        '.32',
+        '1.6'
       );
     });
 
-    const label = (x, y, text, fill, anchor = 'start', size = '16') => {
-      const node = svgNode('text', {
-        x,
-        y,
-        fill,
-        'font-family': LABEL_FONT,
-        'font-size': size,
-        'text-anchor': anchor,
-      });
-      node.textContent = text;
-      return node;
-    };
+    addCross(group, CX, CY, 10, INK, '1', '1.4');
+    group.appendChild(svgNode('circle', { cx: CX, cy: CY, r: '3', fill: INK }));
 
-    group.appendChild(label(CX - 10, 42, '机械轴', MUTED, 'end', '18'));
-    group.appendChild(label(lensX + 10, 42, '光轴', ACCENT, 'start', '18'));
-    group.appendChild(label(CX, dimY + 18, 'Δ', MUTED, 'middle', '16'));
-    group.appendChild(label(636, SENSOR_Y + 20, '传感器', MUTED, 'end', '15'));
-    group.appendChild(label(104, 72, '通道 A', ACCENT, 'start', '15'));
-    group.appendChild(label(616, 72, '通道 B', ACCENT, 'end', '15'));
+    group.appendChild(
+      svgNode('line', {
+        x1: CX,
+        y1: CY,
+        x2: x.toFixed(1),
+        y2: y.toFixed(1),
+        stroke: ACCENT,
+        'stroke-width': '1',
+        'stroke-dasharray': '2 5',
+        opacity: '.4',
+      })
+    );
+
+    group.appendChild(svgNode('circle', { cx: x.toFixed(1), cy: y.toFixed(1), r: '9', fill: PAPER }));
+    addCross(group, x, y, 32, ACCENT, '1', '2.6');
+    group.appendChild(
+      label(x < CX ? x - 18 : x + 18, y - 18, '十字像', ACCENT, x < CX ? 'end' : 'start', '17')
+    );
+
+    const mx = CX + Math.cos(theta) * radius * 0.5;
+    const my = CY + Math.sin(theta) * radius * 0.5;
+    group.appendChild(label(mx, my - 12, 'R', MUTED, 'middle', '16'));
+    group.appendChild(label(CX, CY - radius - 16, '拟合圆', ACCENT, 'middle', '18'));
+    group.appendChild(label(CX + 16, CY + 26, '旋转中心', MUTED, 'start', '18'));
 
     plot.replaceChildren(group);
 
-    setAll('[data-dec-offset]', String(state.offset));
-    setAll('[data-dec-value]', String(state.offset));
-    if (bar) bar.style.width = `${Math.round((state.offset / 50) * 100)}%`;
+    const arcsec = ((state.eccentricity / 1000) / R_MM) * 206264.806;
+    setAll('[data-dec-offset]', String(state.eccentricity));
+    setAll('[data-dec-value]', String(state.eccentricity));
+    setAll('[data-dec-arcsec]', `${Math.round(arcsec)}″`);
+    setAll('[data-dec-radius]', `${Math.round(radius)} px`);
+    setAll('[data-dec-coverage]', `${state.angle}°`);
+    setAll('[data-dec-angle-label]', `${state.angle}°`);
+    if (bar) bar.style.width = `${Math.round((state.eccentricity / 50) * 100)}%`;
   };
 
-  input.addEventListener('input', (event) => {
-    state.offset = Number(event.target.value);
-    render();
-  });
+  if (input) {
+    input.addEventListener('input', (event) => {
+      state.eccentricity = Number(event.target.value);
+      render();
+    });
+  }
+
+  if (angleInput) {
+    angleInput.addEventListener('input', (event) => {
+      state.angle = Number(event.target.value);
+      render();
+    });
+  }
 
   render();
 };

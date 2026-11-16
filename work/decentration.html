@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>双光路偏心仪软件 — 刘东琦</title>
-  <meta name="description" content="双光路偏心测量软件初版：提取两路光斑与中心位置，计算镜片偏心量，精度 µm 级。">
+  <meta name="description" content="反射式偏心测量软件初版：相机采集球心十字像，旋转一圈后鲁棒拟合轨迹圆，换算线偏心与角偏心。">
   <meta name="theme-color" content="#faf7ef">
   <link rel="icon" href="../favicon.svg" type="image/svg+xml">
   <link rel="preload" href="../assets/fonts/noto-sans-sc.woff2" as="font" type="font/woff2" crossorigin>
@@ -40,12 +40,12 @@
         <div class="case-hero__copy">
           <a class="back-link" href="../index.html#work">← 三个工具</a>
           <h1 id="case-title">双光路偏心仪软件</h1>
-          <p class="case-lead">用两束光，找到镜片的中心。</p>
+          <p class="case-lead">让反射十字像随镜片转一圈，<br>用轨迹圆拟合出线偏心和角偏心。</p>
           <dl class="case-meta">
-            <div><dt>输入</dt><dd>双光路图像</dd></div>
-            <div><dt>输出</dt><dd>偏心量 Δ</dd></div>
-            <div><dt>精度</dt><dd>µm 级</dd></div>
-            <div><dt>版本</dt><dd>初版</dd></div>
+            <div><dt>输入</dt><dd>相机 / 视频 / 模拟</dd></div>
+            <div><dt>输出</dt><dd>线偏心 · 角偏心</dd></div>
+            <div><dt>精度</dt><dd>µm 级（需标定）</dd></div>
+            <div><dt>版本</dt><dd>初版 / MVP</dd></div>
           </dl>
         </div>
 
@@ -60,45 +60,45 @@
 
             <div class="demo-stage dec-stage">
               <svg data-dec-svg viewBox="0 0 720 460" role="img" aria-labelledby="dec-demo-title">
-                <title id="dec-demo-title">双光路偏心测量示意</title>
+                <title id="dec-demo-title">反射十字轨迹与圆拟合示意</title>
                 <g data-dec-plot></g>
               </svg>
               <div class="stage-hud">
-                <span>双光路 / 镜片</span>
-                <span>Δ = <b data-dec-offset>12</b> µm</span>
+                <span>反射十字 / 轨迹</span>
+                <span>Δ = <b data-dec-offset>30</b> µm</span>
               </div>
               <div class="stage-hud stage-hud--bottom">
-                <span>通道 A / B</span>
-                <span>机械轴基准</span>
+                <span>旋转中心 / 拟合圆</span>
+                <span>R = 50 mm · 示意</span>
               </div>
             </div>
 
             <div class="readout">
               <div class="readout__head">
-                <span class="readout__label">偏心量 Δ · 示意</span>
-                <span class="readout__sub">双光路 · 初版</span>
+                <span class="readout__label">线偏心 · 示意</span>
+                <span class="readout__sub">反射十字 / 圆拟合</span>
               </div>
               <div class="readout__main">
-                <span class="readout__value" data-dec-value>12</span>
+                <span class="readout__value" data-dec-value>30</span>
                 <span class="readout__unit">µm</span>
               </div>
               <div class="readout__bar"><i data-dec-bar></i></div>
               <dl class="readout__list">
-                <div><dt>通道</dt><dd>A / B</dd></div>
-                <div><dt>精度</dt><dd>µm 级</dd></div>
-                <div><dt>版本</dt><dd>初版</dd></div>
+                <div><dt>角偏心</dt><dd data-dec-arcsec>124″</dd></div>
+                <div><dt>轨迹半径</dt><dd data-dec-radius>147 px</dd></div>
+                <div><dt>覆盖</dt><dd data-dec-coverage>300°</dd></div>
               </dl>
             </div>
 
             <div class="controls">
               <label class="control">
-                <span>模拟偏心量 Δ <b><span data-dec-offset>12</span> µm</b></span>
-                <input type="range" min="0" max="50" step="1" value="12" data-dec-input>
+                <span>线偏心 Δ <b><span data-dec-offset>30</span> µm</b></span>
+                <input type="range" min="0" max="50" step="1" value="30" data-dec-input>
               </label>
-              <div class="control control--note">
-                <span>测量方式 <b>双光路</b></span>
-                <p>拖动滑块，查看光轴相对机械轴的偏移，以及两路光束在传感器上的落点。</p>
-              </div>
+              <label class="control">
+                <span>旋转角度 <b data-dec-angle-label>300°</b></span>
+                <input type="range" min="0" max="360" step="1" value="300" data-dec-angle-input>
+              </label>
             </div>
           </div>
         </div>
@@ -113,22 +113,29 @@
             <li>
               <span>01</span>
               <div>
-                <b>双光路采集</b>
-                <p>两路光学系统从不同方向获取镜片中心图像，保留中心与传感器基准。</p>
+                <b>找像</b>
+                <p>相机连续采集球心反射十字像；支持 OpenCV 摄像头、视频文件，以及不接硬件的模拟源。</p>
               </div>
             </li>
             <li>
               <span>02</span>
               <div>
-                <b>提取光斑 / 中心</b>
-                <p>对两路图像做光斑或中心提取，得到相对机械轴的位置。</p>
+                <b>亚像素定位</b>
+                <p>自动识别亮十字或暗十字，提取亚像素中心，作为当前角度下的球心像位置。</p>
               </div>
             </li>
             <li>
               <span>03</span>
               <div>
-                <b>计算偏心量</b>
-                <p>根据两路结果的差值计算偏心量，输出 µm 级读数并记录测量结果。</p>
+                <b>旋转与圆拟合</b>
+                <p>镜片旋转一圈记录轨迹，剔除异常点后鲁棒拟合圆；同时给出覆盖角度、RMS 与峰值误差。</p>
+              </div>
+            </li>
+            <li>
+              <span>04</span>
+              <div>
+                <b>标定与判定</b>
+                <p>用 µm/px 标定把轨迹半径换算成线偏心，再按曲率半径换算角偏心（角秒），做公差判定并保存记录。</p>
               </div>
             </li>
           </ol>
@@ -137,12 +144,13 @@
         <aside class="specs">
           <h2>规格</h2>
           <dl>
-            <div><dt>输入</dt><dd>双光路图像</dd></div>
-            <div><dt>输出</dt><dd>偏心量 Δ</dd></div>
-            <div><dt>精度</dt><dd>µm 级</dd></div>
-            <div><dt>版本</dt><dd>初版</dd></div>
+            <div><dt>输入</dt><dd>相机 / 视频 / 模拟</dd></div>
+            <div><dt>输出</dt><dd>线偏心 · 角偏心 · JSON/CSV</dd></div>
+            <div><dt>技术</dt><dd>Python · OpenCV · PySide6</dd></div>
+            <div><dt>标定</dt><dd>µm/px（需标准件）</dd></div>
+            <div><dt>状态</dt><dd>初版 · MVP</dd></div>
           </dl>
-          <p class="note">演示中的偏心量由滑块模拟，用于说明光轴、机械轴与传感器落点的关系；真实测量流程与精度以软件输出为准。</p>
+          <p class="note">当前是软件原型，不是经过计量认证的商用测量软件。线偏心、角偏心依赖 µm/px 标定和曲率半径；上线前需要标准件、重复性、温漂与量值溯源验证。演示数值为模拟数据。</p>
         </aside>
       </div>
     </section>

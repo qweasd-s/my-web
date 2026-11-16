@@ -56,11 +56,11 @@ No mono face. No letter-spaced capitals. Units and numerals use tabular figures.
 - **Nav pill**: fixed, floating, clear white; prism mark, name, three links, primary email button. Links collapse on mobile.
 - **Hero**: two columns; name / Latin name / role / statement / actions left; lit stage right.
 - **Lit stage**: rounded paper panel, tinted cast shadow, canvas light, clear card floating at its lower left. The card overlaps the light rather than sitting beside it.
-- **Measurement card**: clear surface, `演示` pill, line-pair or schematic stage, large accent reading, 2px bar, three-cell data list, controls.
+- **Measurement card**: clear surface, `演示` pill, a line-pair, cross-target or crosshair-trajectory stage, large accent reading, 2px bar, three-cell data list, controls.
 - **Project table**: five-column rows (project / input / output / precision / state); full-row links; hover accent-soft wash; the third row is marked `初版`.
 - **About band**: paper-2 ground, statement left, fact list right.
 - **Contact**: large display line, email / vCard / copy actions, confidentiality note.
-- **Case pages**: back link, title, lead, four-cell meta table; test card in the lit stage; numbered method and specs below; next-tool + email; footer.
+- **Case pages**: back link, title, lead, four-cell meta table; test card in the lit stage; numbered method and specs below; next-tool + email; footer. The cross-target and trajectory schematics use ink line work with accent centerlines and one accent measurement marker.
 - **Footer**: copyright, role, email, back to top.
 
 ## Layout

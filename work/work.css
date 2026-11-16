@@ -342,6 +342,12 @@
   font-weight: 500;
 }
 
+.profile__head b {
+  color: var(--color-ink);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
 .profile svg {
   width: 100%;
   height: 56px;
@@ -513,6 +519,7 @@
   color: var(--color-ink-2);
   font-size: 15px;
   line-height: 1.65;
+  text-wrap: pretty;
 }
 
 .specs dl {
@@ -546,6 +553,7 @@
   color: var(--color-muted);
   font-size: 13px;
   line-height: 1.65;
+  text-wrap: pretty;
 }
 
 .case-next {
@@ -701,6 +709,13 @@
   .readout__bar i,
   .next-link b {
     transition: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .dist-stage text,
+  .dec-stage text {
+    font-size: 24px;
   }
 }
 

@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>畸变计算软件 — 刘东琦</title>
-  <meta name="description" content="从拍摄的网格图像提取格点、拟合畸变模型并计算镜头畸变值，测量精度 µm 级。">
+  <meta name="description" content="十字中心 O1/O2 定位与畸变残差计算：亚像素边缘、Huber 鲁棒拟合、批次坐标对齐，输出残差图与质检报告。">
   <meta name="theme-color" content="#faf7ef">
   <link rel="icon" href="../favicon.svg" type="image/svg+xml">
   <link rel="preload" href="../assets/fonts/noto-sans-sc.woff2" as="font" type="font/woff2" crossorigin>
@@ -40,12 +40,12 @@
         <div class="case-hero__copy">
           <a class="back-link" href="../index.html#work">← 三个工具</a>
           <h1 id="case-title">畸变计算软件</h1>
-          <p class="case-lead">从一张拍摄的网格图，算出镜头的畸变值。</p>
+          <p class="case-lead">在十字靶图上定位 O1/O2，<br>用批次坐标和一阶模型算出畸变残差。</p>
           <dl class="case-meta">
-            <div><dt>输入</dt><dd>拍摄网格图</dd></div>
-            <div><dt>输出</dt><dd>畸变值</dd></div>
+            <div><dt>输入</dt><dd>十字靶图</dd></div>
+            <div><dt>输出</dt><dd>O1/O2 · 残差</dd></div>
             <div><dt>精度</dt><dd>µm 级</dd></div>
-            <div><dt>方式</dt><dd>格点拟合</dd></div>
+            <div><dt>方式</dt><dd>亚像素拟合</dd></div>
           </dl>
         </div>
 
@@ -60,45 +60,45 @@
 
             <div class="demo-stage dist-stage">
               <svg data-dist-svg viewBox="0 0 720 460" role="img" aria-labelledby="dist-demo-title">
-                <title id="dist-demo-title">网格畸变与格点检测示意</title>
+                <title id="dist-demo-title">十字靶图、O1/O2 中心线与残差示意</title>
                 <g data-dist-plot></g>
               </svg>
               <div class="stage-hud">
-                <span>拍摄图 / 网格</span>
-                <span>k1 = <b data-dist-k>−0.12</b></span>
+                <span>十字靶图 / O1 · O2</span>
+                <span>一阶模型</span>
               </div>
               <div class="dist-stage__legend">
-                <span><i class="is-dashed"></i>理想网格</span>
-                <span><i></i>拍摄图像</span>
-                <span><i class="is-dot"></i>检测点</span>
+                <span><i class="is-dashed"></i>条纹中线</span>
+                <span><i class="is-dot"></i>O1 / O2</span>
+                <span><i></i>残差方向</span>
               </div>
             </div>
 
             <div class="readout">
               <div class="readout__head">
-                <span class="readout__label">边缘视场偏移 · 示意</span>
-                <span class="readout__sub">全视场 · 63 点</span>
+                <span class="readout__label">边缘残差 · 示意</span>
+                <span class="readout__sub">混合边缘 · 一阶模型</span>
               </div>
               <div class="readout__main">
-                <span class="readout__value" data-dist-delta>12</span>
+                <span class="readout__value" data-dist-residual>0.28</span>
                 <span class="readout__unit">µm</span>
               </div>
               <div class="readout__bar"><i data-dist-bar></i></div>
               <dl class="readout__list">
-                <div><dt>k1</dt><dd data-dist-k>−0.12</dd></div>
-                <div><dt>格点</dt><dd>63</dd></div>
-                <div><dt>精度</dt><dd>µm 级</dd></div>
+                <div><dt>dx</dt><dd data-dist-dx>12.4 µm</dd></div>
+                <div><dt>dy</dt><dd data-dist-dy>−3.1 µm</dd></div>
+                <div><dt>判定</dt><dd data-dist-status>正常</dd></div>
               </dl>
             </div>
 
             <div class="controls">
               <label class="control">
-                <span>径向畸变系数 k1 <b data-dist-k>−0.12</b></span>
-                <input type="range" min="-0.30" max="0.30" step="0.01" value="-0.12" data-dist-input>
+                <span>ESF / 梯度差异 <b data-dist-diff-label>0.12 px</b></span>
+                <input type="range" min="0" max="0.6" step="0.01" value="0.12" data-dist-diff>
               </label>
               <label class="control control--check">
-                <span>显示检测点</span>
-                <input type="checkbox" checked data-dist-points>
+                <span>显示中心线</span>
+                <input type="checkbox" checked data-dist-centerlines>
               </label>
             </div>
           </div>
@@ -114,22 +114,29 @@
             <li>
               <span>01</span>
               <div>
-                <b>拍摄网格标板</b>
-                <p>用待测镜头拍摄已知结构的网格 / 标板图像，保留完整的视场信息。</p>
+                <b>采集十字靶图</b>
+                <p>每张图包含两组竖条与横条；O1、O2 分别是条纹中心线的交点。</p>
               </div>
             </li>
             <li>
               <span>02</span>
               <div>
-                <b>提取格点坐标</b>
-                <p>通过图像处理检测网格交点，把理想格点与实拍格点一一对应。</p>
+                <b>亚像素边缘定位</b>
+                <p>每条物理边缘同时计算 ESF 50% 位置与最大梯度邻域重心，用两路差异决定正常、关注或回退梯度。</p>
               </div>
             </li>
             <li>
               <span>03</span>
               <div>
-                <b>拟合模型并输出</b>
-                <p>拟合径向畸变模型，计算边缘视场的偏移量，输出 µm 级畸变结果。</p>
+                <b>鲁棒拟合与交点</b>
+                <p>过滤噪声点后用 Huber 加权直线拟合条纹中线，求 O1/O2，并由协方差传播得到 dx/dy 的不确定度。</p>
+              </div>
+            </li>
+            <li>
+              <span>04</span>
+              <div>
+                <b>整批对齐与残差</b>
+                <p>按 180° 周期稳健估计模板角，SVD 正交化后换算到标定坐标；一阶模型拟合，输出残差图、CSV 和质检报告。</p>
               </div>
             </li>
           </ol>
@@ -138,12 +145,13 @@
         <aside class="specs">
           <h2>规格</h2>
           <dl>
-            <div><dt>输入</dt><dd>拍摄网格图像</dd></div>
-            <div><dt>输出</dt><dd>畸变值 / 校正图</dd></div>
-            <div><dt>模型</dt><dd>径向畸变（示意）</dd></div>
-            <div><dt>精度</dt><dd>µm 级</dd></div>
+            <div><dt>输入</dt><dd>十字靶图</dd></div>
+            <div><dt>输出</dt><dd>O1/O2 · 残差图 · CSV</dd></div>
+            <div><dt>边缘</dt><dd>ESF + 梯度双路</dd></div>
+            <div><dt>环境</dt><dd>Python · OpenCV · PySide6</dd></div>
+            <div><dt>判定</dt><dd>µm 级阈值（可配置）</dd></div>
           </dl>
-          <p class="note">演示中的 k1 与偏移量为模拟数据，用于说明“图像 → 格点 → 模型 → 畸变值”的流程；真实算法参数与结果以软件输出为准。</p>
+          <p class="note">演示把边缘差异映射为“正常 / 关注 / 回退梯度”，数值为模拟数据；实际软件还会输出标注图、summary 和残差图，判定阈值可配置。真实结果以软件输出为准。</p>
         </aside>
       </div>
     </section>
