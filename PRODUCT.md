@@ -28,16 +28,14 @@ A Refract personal card for 刘东琦 (Liu Dongqi), an AI software development e
 - Case demo values are synthetic and labelled `演示` / `示意`; the site note says they are simulated.
 - Internal model codes, customer data and raw production measurements are intentionally omitted.
 
-## Persona
+## Personal profile and desktop pet
 
-The site's virtual image is the **光学操作员 (optical operator)**, not a 3D character. It is built from four repeated signals:
+The site's virtual image is a light personal profile plus a small interactive character, not a 3D avatar:
 
-- A glass-cameo avatar: a solid ink side profile with a prism and spectrum, used on the hero stage badge.
-- A first-person voice: the operator notes describe real trade-offs (MTF quality flags, the first-order distortion model, the eccentricity MVP limits).
-- A status ritual: `在岗 · 偏心仪 MVP` on the badge and a dated `更新` row in the about facts.
-- An interaction: five offline preset Q&A entries in the operator's voice, explicitly labeled as not a live AI.
-
-The persona must stay understated and credible; no mascot antics, no fake sentience, no invented biography.
+- A real 4:5 portrait in the about section, with a first-person bio and the current facts (`现在 / 方向 / 精度 / 地点 / 更新`).
+- A vector desktop pet drawn from the portrait: black hair and bangs, light blue overshirt, white tee. On desktop it sits bottom-right, can be dragged, blinks, follows the pointer with its eyes, and speaks a short line on click. On mobile it docks after the hero stage so it never covers copy.
+- First-person work notes describing real trade-offs, and five offline preset Q&A entries in the user's voice.
+- The pet is a playful representation, not a claim of sentience or a live AI. No invented biography.
 
 ## Constraints
 
@@ -46,8 +44,9 @@ The persona must stay understated and credible; no mascot antics, no fake sentie
 - Do not expose internal model codes, company data, customer information, internal UI, raw measurement images, or line-specific parameters. Algorithm descriptions stay at a public-safe conceptual level.
 - Demos must remain understandable without JS: the copy and figures carry the explanation; the controls enhance it.
 - The Q&A is honest about being offline/preset. Do not label it as a live AI or imply it can answer arbitrary questions.
+- The mobile pet must stay in the document flow; it must never cover the bio, facts, or CTAs.
 - The spectrum exists only inside the generated light; never as a decorative UI color.
 
 ## Success
 
-A first-time visitor reads this as a technical measurement engineer's bench and a specific person: the operator cameo, the prism light, the three tools, the first-person notes, the µm precision, and a clear way into each test bench. It should feel like daylight on an optical table, not a marketing page or a dark console.
+A first-time visitor reads this as a technical measurement engineer's bench and a specific person: the portrait profile, the prism light, the three tools, the first-person notes, the desktop pet, the µm precision, and a clear way into each test bench. It should feel like daylight on an optical table, not a marketing page or a dark console.

@@ -13,7 +13,7 @@
   <meta property="og:image" content="https://qweasd-s.github.io/my-web/assets/og.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="刘东琦 — 光学操作员，MTF、畸变与偏心测量软件">
+  <meta property="og:image:alt" content="刘东琦 — AI 软件开发工程师，MTF、畸变与偏心测量软件">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="preload" href="assets/fonts/noto-sans-sc.woff2" as="font" type="font/woff2" crossorigin>
@@ -75,15 +75,6 @@
         <div class="hero__stage light-stage" data-light-stage>
           <canvas class="light-canvas" data-light aria-hidden="true"></canvas>
 
-          <a class="operator-badge" href="#notes" aria-label="查看刘东琦的操作员笔记">
-            <img class="operator-avatar" src="assets/operator.svg" alt="" width="64" height="64" aria-hidden="true">
-            <div class="operator-badge__body">
-              <span class="operator-badge__role">光学操作员</span>
-              <b class="operator-badge__name">刘东琦</b>
-              <span class="operator-badge__status"><i></i>在岗 · 偏心仪 MVP</span>
-            </div>
-          </a>
-
           <div class="measure-card clear">
             <div class="measure-card__head">
               <span class="measure-card__title">MTF / 单目标线对</span>
@@ -117,6 +108,8 @@
         </div>
       </div>
     </section>
+
+    <div class="wrap pet-dock" data-pet-root></div>
 
     <section class="work" id="work" aria-labelledby="work-title">
       <div class="wrap">
@@ -173,9 +166,9 @@
     <section class="notes" id="notes" aria-labelledby="notes-title">
       <div class="wrap notes__grid">
         <div class="notes__intro">
-          <h2 id="notes-title">操作员笔记</h2>
+          <h2 id="notes-title">工作笔记</h2>
           <p>我在项目里真正做过的取舍，写在仪器旁边。</p>
-          <p class="notes__sign">刘东琦 / 光学操作员</p>
+          <p class="notes__sign">刘东琦 / AI 软件开发工程师</p>
         </div>
 
         <div class="notes__list">
@@ -208,25 +201,29 @@
 
     <section class="about" id="about" aria-labelledby="about-title">
       <div class="wrap about__grid">
-        <div class="about__copy">
+        <figure class="about__portrait">
+          <img src="assets/portrait.jpg" alt="刘东琦的肖像" width="682" height="1024">
+          <figcaption>刘东琦 / AI 软件开发工程师</figcaption>
+        </figure>
+        <div class="about__body">
           <h2 id="about-title">在光学与软件之间。</h2>
           <p>我在一家光学镜片公司做 AI 软件开发。日常用 MATLAB、Python 和 Qt，把 MTF、畸变、偏心这些测量做成工程师真的会用的软件。</p>
           <p>三个工具都从同一件事出发：把光学结果变成可读、可比较的数据。精度以 µm 计。</p>
+          <dl class="fact-list">
+            <div><dt>现在</dt><dd>偏心仪 MVP 的标定与重复性</dd></div>
+            <div><dt>方向</dt><dd>AI 软件 · 光学测量</dd></div>
+            <div><dt>精度</dt><dd>µm 级</dd></div>
+            <div><dt>地点</dt><dd>CN / 2026</dd></div>
+            <div><dt>更新</dt><dd>2026.11</dd></div>
+          </dl>
         </div>
-        <dl class="fact-list">
-          <div><dt>现在</dt><dd>偏心仪 MVP 的标定与重复性</dd></div>
-          <div><dt>方向</dt><dd>AI 软件 · 光学测量</dd></div>
-          <div><dt>精度</dt><dd>µm 级</dd></div>
-          <div><dt>地点</dt><dd>CN / 2026</dd></div>
-          <div><dt>更新</dt><dd>2026.11</dd></div>
-        </dl>
       </div>
     </section>
 
     <section class="ask" id="ask" aria-labelledby="ask-title">
       <div class="wrap ask__grid">
         <div class="ask__intro">
-          <h2 id="ask-title">问操作员</h2>
+          <h2 id="ask-title">问我</h2>
           <p>五个常被问到的问题。这里是离线预设回答，不是在线 AI；想聊更多，直接发邮件。</p>
           <a class="text-link" href="mailto:2823641678@qq.com">还有别的问题，发邮件 <span aria-hidden="true">→</span></a>
         </div>
@@ -287,6 +284,7 @@
   </footer>
 
   <script src="light.js" defer></script>
+  <script src="pet.js" defer></script>
   <script src="script.js" defer></script>
 </body>
 </html>

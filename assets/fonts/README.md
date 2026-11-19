@@ -1,6 +1,6 @@
 # Fonts
 
-All fonts are locally hosted, subsetted to the characters used across `index.html`, `work/*.html` and the UI strings in `script.js` / `work/work.js`, and licensed under the SIL Open Font License 1.1.
+All fonts are locally hosted, subsetted to the characters used across `index.html`, `work/*.html` and the UI strings in `script.js` / `work/work.js` / `pet.js`, and licensed under the SIL Open Font License 1.1.
 
 | File | Family | Source | License |
 | --- | --- | --- | --- |
