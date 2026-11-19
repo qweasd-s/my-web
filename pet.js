@@ -5,6 +5,7 @@
 
   const project = document.body.dataset.project;
   const avatarSrc = project ? '../assets/portrait.jpg' : 'assets/portrait.jpg';
+  const artSrc = project ? '../assets/pet-character.svg' : 'assets/pet-character.svg';
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const faq = [
@@ -99,12 +100,10 @@
       <p class="pet__text"></p>
     </div>
     <button class="pet__character" type="button" aria-label="和刘东琦对话，可以拖动我">
-      <span class="pet-avatar">
-        <img src="${avatarSrc}" alt="" width="682" height="1024">
-        <span class="pet-avatar__status" aria-hidden="true"></span>
-        <span class="pet-avatar__bars" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span class="pet-character">
+        <img src="${artSrc}" alt="" width="1534" height="2456">
+        <span class="pet-character__bars" aria-hidden="true"><i></i><i></i><i></i></span>
       </span>
-      <span class="pet-name">刘东琦 <small>在岗</small></span>
     </button>
     <span class="pet__hint" aria-hidden="true">点我说话</span>
   `;

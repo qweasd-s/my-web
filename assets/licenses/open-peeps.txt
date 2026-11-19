@@ -1,0 +1,11 @@
+Open Peeps — hand-drawn people illustration library
+by Pablo Stanley
+https://www.openpeeps.com/
+
+The Open Peeps illustration library is released under CC0 1.0 Universal
+(public domain dedication). The head and seated body used for
+assets/pet-avatar.svg and assets/pet-character.svg were recolored,
+recomposed and integrated into this site.
+
+Open Peeps: https://www.openpeeps.com/
+CC0 1.0: https://creativecommons.org/publicdomain/zero/1.0/

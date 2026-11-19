@@ -1030,9 +1030,9 @@ svg {
 .pet {
   position: fixed;
   right: 24px;
-  bottom: 22px;
+  bottom: 0;
   z-index: 35;
-  width: 112px;
+  width: 120px;
   touch-action: none;
   user-select: none;
 }
@@ -1041,7 +1041,7 @@ svg {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 5px;
+  gap: 0;
   width: 100%;
   padding: 0;
   border: 0;
@@ -1053,51 +1053,28 @@ svg {
   cursor: grabbing;
 }
 
-.pet-avatar {
+.pet-character {
   position: relative;
   display: block;
   width: 100%;
-  aspect-ratio: 1 / 1;
-  overflow: hidden;
-  border: 3px solid var(--color-light);
-  border-radius: 50%;
-  background: var(--color-paper-2);
-  box-shadow: 0 0 0 1px var(--color-rule), 0 18px 40px -28px oklch(40% 0.06 230 / 0.55);
-  transform: rotate(var(--pet-tilt, 0deg));
+  transform-origin: 50% 100%;
   animation: pet-float 4.8s ease-in-out infinite;
 }
 
-.pet.is-dragging .pet-avatar {
+.pet.is-dragging .pet-character {
   animation: none;
 }
 
-.pet-avatar img {
+.pet-character img {
   display: block;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: 50% 4%;
-  transform: scale(1.16);
-  transform-origin: 50% 22%;
-  filter: saturate(0.98) contrast(1.01);
+  height: auto;
 }
 
-.pet-avatar__status {
+.pet-character__bars {
   position: absolute;
-  top: 7px;
-  right: 7px;
-  width: 9px;
-  height: 9px;
-  border: 2px solid var(--color-light);
-  border-radius: 50%;
-  background: var(--color-accent);
-  box-shadow: 0 1px 3px oklch(30% 0.05 230 / 0.35);
-}
-
-.pet-avatar__bars {
-  position: absolute;
-  left: 50%;
-  bottom: 8px;
+  top: 23%;
+  right: 2%;
   display: none;
   align-items: flex-end;
   gap: 2px;
@@ -1105,14 +1082,13 @@ svg {
   padding: 3px 5px;
   border-radius: var(--radius-pill);
   background: oklch(23% 0.035 245 / 0.55);
-  transform: translateX(-50%);
 }
 
-.pet.is-speaking .pet-avatar__bars {
+.pet.is-speaking .pet-character__bars {
   display: flex;
 }
 
-.pet-avatar__bars i {
+.pet-character__bars i {
   width: 2px;
   height: 7px;
   border-radius: 1px;
@@ -1120,30 +1096,12 @@ svg {
   animation: pet-bar 0.5s ease-in-out infinite alternate;
 }
 
-.pet-avatar__bars i:nth-child(2) {
+.pet-character__bars i:nth-child(2) {
   animation-delay: 0.12s;
 }
 
-.pet-avatar__bars i:nth-child(3) {
+.pet-character__bars i:nth-child(3) {
   animation-delay: 0.24s;
-}
-
-.pet-name {
-  color: var(--color-ink);
-  font-family: var(--font-display);
-  font-size: 11px;
-  font-weight: 400;
-  letter-spacing: -0.01em;
-  line-height: 1;
-  white-space: nowrap;
-}
-
-.pet-name small {
-  margin-left: 3px;
-  color: var(--color-muted);
-  font-family: var(--font-body);
-  font-size: 9px;
-  font-weight: 500;
 }
 
 @keyframes pet-float {
@@ -1406,13 +1364,9 @@ svg {
   line-height: 1.5;
 }
 
-.pet.is-speaking .pet-avatar {
-  box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-accent) 20%, transparent), 0 0 0 1px var(--color-rule), 0 18px 40px -28px oklch(40% 0.06 230 / 0.55);
-}
-
 @media (min-width: 901px) {
   body {
-    padding-bottom: 182px;
+    padding-bottom: 212px;
   }
 }
 
@@ -1470,7 +1424,7 @@ svg {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    width: 240px;
+    width: 104px;
   }
 
   .pet.is-chatting {
@@ -1479,7 +1433,7 @@ svg {
   }
 
   .pet__character {
-    width: 88px;
+    width: 96px;
   }
 
   .pet-panel {
@@ -1527,7 +1481,7 @@ svg {
 
   .pet__hint {
     display: block;
-    width: 88px;
+    width: 96px;
     margin-top: 2px;
     color: var(--color-muted);
     font-size: 11px;
@@ -1745,9 +1699,9 @@ svg {
     transition-duration: 0.01ms !important;
   }
 
-  .pet-avatar,
-  .pet-avatar__bars,
-  .pet.is-speaking .pet-avatar__bars {
+  .pet-character,
+  .pet-character__bars,
+  .pet.is-speaking .pet-character__bars {
     animation: none !important;
   }
 }
