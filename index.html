@@ -9,6 +9,12 @@
   <meta property="og:title" content="刘东琦 — AI 软件开发工程师">
   <meta property="og:description" content="在镜片与代码之间，做测量光的软件。">
   <meta property="og:type" content="website">
+  <meta property="og:url" content="https://qweasd-s.github.io/my-web/">
+  <meta property="og:image" content="https://qweasd-s.github.io/my-web/assets/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="刘东琦 — 光学操作员，MTF、畸变与偏心测量软件">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="preload" href="assets/fonts/noto-sans-sc.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/funnel-display.woff2" as="font" type="font/woff2" crossorigin>
@@ -42,6 +48,7 @@
       <nav class="nav-links" aria-label="主导航">
         <a href="#work">工作</a>
         <a href="#about">关于</a>
+        <a href="#ask">问答</a>
         <a href="#contact">联系</a>
       </nav>
       <a class="btn btn--primary btn--nav" href="mailto:2823641678@qq.com">发邮件</a>
@@ -67,6 +74,15 @@
 
         <div class="hero__stage light-stage" data-light-stage>
           <canvas class="light-canvas" data-light aria-hidden="true"></canvas>
+
+          <a class="operator-badge" href="#notes" aria-label="查看刘东琦的操作员笔记">
+            <img class="operator-avatar" src="assets/operator.svg" alt="" width="64" height="64" aria-hidden="true">
+            <div class="operator-badge__body">
+              <span class="operator-badge__role">光学操作员</span>
+              <b class="operator-badge__name">刘东琦</b>
+              <span class="operator-badge__status"><i></i>在岗 · 偏心仪 MVP</span>
+            </div>
+          </a>
 
           <div class="measure-card clear">
             <div class="measure-card__head">
@@ -154,6 +170,42 @@
       </div>
     </section>
 
+    <section class="notes" id="notes" aria-labelledby="notes-title">
+      <div class="wrap notes__grid">
+        <div class="notes__intro">
+          <h2 id="notes-title">操作员笔记</h2>
+          <p>我在项目里真正做过的取舍，写在仪器旁边。</p>
+          <p class="notes__sign">刘东琦 / 光学操作员</p>
+        </div>
+
+        <div class="notes__list">
+          <article class="note-item">
+            <span class="note-item__label">MTF / 质量状态</span>
+            <div>
+              <h3>结果可以超差，但不能没有状态</h3>
+              <p>批处理里，NRMSE 超限时我仍然保留结果，但在表里标出来。测量最怕的不是误差，是不知道哪一条不可信。</p>
+            </div>
+          </article>
+
+          <article class="note-item">
+            <span class="note-item__label">畸变 / 模型选择</span>
+            <div>
+              <h3>一阶模型不是能力上限，是诊断选择</h3>
+              <p>更高阶的模型能把残差压小，但也可能把拍摄或装配的问题一起拟合掉。先用一阶模型，让真实问题留在图上。</p>
+            </div>
+          </article>
+
+          <article class="note-item">
+            <span class="note-item__label">偏心 / MVP</span>
+            <div>
+              <h3>MVP 不是缩小版，是还没被证明</h3>
+              <p>偏心的读数依赖 µm/px 标定、曲率半径和标准件。标定、重复性和温漂没走完之前，它只是一个能演示流程的原型。</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
     <section class="about" id="about" aria-labelledby="about-title">
       <div class="wrap about__grid">
         <div class="about__copy">
@@ -162,11 +214,49 @@
           <p>三个工具都从同一件事出发：把光学结果变成可读、可比较的数据。精度以 µm 计。</p>
         </div>
         <dl class="fact-list">
-          <div><dt>现在</dt><dd>继续做双光路偏心仪软件的初版</dd></div>
+          <div><dt>现在</dt><dd>偏心仪 MVP 的标定与重复性</dd></div>
           <div><dt>方向</dt><dd>AI 软件 · 光学测量</dd></div>
           <div><dt>精度</dt><dd>µm 级</dd></div>
           <div><dt>地点</dt><dd>CN / 2026</dd></div>
+          <div><dt>更新</dt><dd>2026.11</dd></div>
         </dl>
+      </div>
+    </section>
+
+    <section class="ask" id="ask" aria-labelledby="ask-title">
+      <div class="wrap ask__grid">
+        <div class="ask__intro">
+          <h2 id="ask-title">问操作员</h2>
+          <p>五个常被问到的问题。这里是离线预设回答，不是在线 AI；想聊更多，直接发邮件。</p>
+          <a class="text-link" href="mailto:2823641678@qq.com">还有别的问题，发邮件 <span aria-hidden="true">→</span></a>
+        </div>
+
+        <div class="ask__list">
+          <details class="qa">
+            <summary>你怎么开始一个测量项目？</summary>
+            <p>先把要测的物理量、误差来源和现场条件写清楚，再决定图像怎么采、算法怎么验。能复现，比能演示重要。</p>
+          </details>
+
+          <details class="qa">
+            <summary>为什么你的工具都强调质量状态？</summary>
+            <p>测量结果不怕有误差，怕的是不知道什么时候不可信。所以我会保留超限结果，但把质量状态一起写进表里。</p>
+          </details>
+
+          <details class="qa">
+            <summary>为什么畸变只用一阶模型？</summary>
+            <p>更高阶的模型能把残差压小，但也可能把拍摄或装配的问题一起拟合掉。先用一阶模型，让真实问题留在图上。</p>
+          </details>
+
+          <details class="qa">
+            <summary>偏心仪现在能用在产线吗？</summary>
+            <p>还不能。它现在是 MVP，读数依赖 µm/px 标定、曲率半径和标准件验证。标定、重复性、温漂没做完之前，我不会把它当成最终判定。</p>
+          </details>
+
+          <details class="qa">
+            <summary>你更偏软件还是光学？</summary>
+            <p>我站在中间。光学给我问题和约束，软件给我把测量变成可重复流程的工具。最喜欢的是把两者接起来的那一段。</p>
+          </details>
+        </div>
       </div>
     </section>
 

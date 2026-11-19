@@ -28,14 +28,26 @@ A Refract personal card for 刘东琦 (Liu Dongqi), an AI software development e
 - Case demo values are synthetic and labelled `演示` / `示意`; the site note says they are simulated.
 - Internal model codes, customer data and raw production measurements are intentionally omitted.
 
+## Persona
+
+The site's virtual image is the **光学操作员 (optical operator)**, not a 3D character. It is built from four repeated signals:
+
+- A glass-cameo avatar: a solid ink side profile with a prism and spectrum, used on the hero stage badge.
+- A first-person voice: the operator notes describe real trade-offs (MTF quality flags, the first-order distortion model, the eccentricity MVP limits).
+- A status ritual: `在岗 · 偏心仪 MVP` on the badge and a dated `更新` row in the about facts.
+- An interaction: five offline preset Q&A entries in the operator's voice, explicitly labeled as not a live AI.
+
+The persona must stay understated and credible; no mascot antics, no fake sentience, no invented biography.
+
 ## Constraints
 
 - Static HTML/CSS/JS, no build step, no external runtime requests.
 - Local, subsetted OFL fonts only: Funnel Display, Funnel Sans, Noto Sans SC.
 - Do not expose internal model codes, company data, customer information, internal UI, raw measurement images, or line-specific parameters. Algorithm descriptions stay at a public-safe conceptual level.
 - Demos must remain understandable without JS: the copy and figures carry the explanation; the controls enhance it.
+- The Q&A is honest about being offline/preset. Do not label it as a live AI or imply it can answer arbitrary questions.
 - The spectrum exists only inside the generated light; never as a decorative UI color.
 
 ## Success
 
-A first-time visitor reads this as a technical measurement engineer's bench: the name, the prism light, the three tools, the µm precision, and a clear way into each test bench. It should feel like daylight on an optical table, not a marketing page or a dark console.
+A first-time visitor reads this as a technical measurement engineer's bench and a specific person: the operator cameo, the prism light, the three tools, the first-person notes, the µm precision, and a clear way into each test bench. It should feel like daylight on an optical table, not a marketing page or a dark console.

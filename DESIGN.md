@@ -14,6 +14,7 @@ The theme is **Refract (glass / pool)** from [Nutlope/hallmark](https://github.c
 - Technical detail is content: line pairs, `f₀ = 1000 / p`, Imax/Imin, grid points, axes, channels, µm.
 - Illustrative values are labelled `演示` / `示意`; no invented commercial claims.
 - Sentence case; no tracked capitals, no mono-as-costume, no eyebrow chips, no hero metrics.
+- One operator persona, not a mascot: a cameo mark, first-person field notes, a current status, and an honest offline Q&A. No 3D avatar, no fake live AI.
 
 ## Material and color
 
@@ -60,6 +61,9 @@ No mono face. No letter-spaced capitals. Units and numerals use tabular figures.
 - **Project table**: five-column rows (project / input / output / precision / state); full-row links; hover accent-soft wash; the third row is marked `初版`.
 - **About band**: paper-2 ground, statement left, fact list right.
 - **Contact**: large display line, email / vCard / copy actions, confidentiality note.
+- **Operator badge**: clear pill on the lit stage, 56px glass-cameo avatar (profile + prism), role, name, live status dot, links to the notes.
+- **Operator notes**: first-person project trade-offs; label + display title + short body, separated by rules.
+- **Ask the operator**: five native `<details>` rows; question + accent plus/minus; answers in first person. Labeled as offline preset answers, not a live AI.
 - **Case pages**: back link, title, lead, four-cell meta table; test card in the lit stage; numbered method and specs below; next-tool + email; footer. The cross-target and trajectory schematics use ink line work with accent centerlines and one accent measurement marker.
 - **Footer**: copyright, role, email, back to top.
 
@@ -84,6 +88,7 @@ No mono face. No letter-spaced capitals. Units and numerals use tabular figures.
 - Semantic landmarks, skip link, labelled SVGs; the light canvas is aria-hidden.
 - Color is never the only cue: every state has a word (`演示`, `初版`, `清晰` / `离焦`).
 - Reduced motion removes transitions and freezes the light.
+- Q&A uses native `<details>`/`<summary>`, so it works with keyboard and without JavaScript.
 
 ## Anti-patterns
 
