@@ -25,7 +25,7 @@ python3 -m http.server 8000
 
 分享卡 `assets/og.png` 把肖像、姓名和棱镜光放在同一张 1200×630 图里，用于社交预览。
 
-“关于”区是个人侧写：4:5 肖像 + 自我介绍 + 现在 / 方向 / 精度 / 地点 / 更新。右下角是一个手绘墨线分身：坐姿人物、黑发、浅蓝领口与白 T 层次，用 Open Peeps 的手绘人物素材重新配色、拼合，并接入语音问答。桌面端坐在页面右下角，可拖动、轻微浮动并跟随鼠标倾斜；移动端停靠在首屏末尾，不遮挡页面内容。语音面板保留真实照片作为头像，明确标注“肖像分身、不是在线 AI”；问题在本地做关键词匹配，回答用浏览器中文语音合成读出来，默认语速放慢、音高放柔，可以随时静音，也可以在多个中文声线之间“换声”。三条“工作笔记”用第一人称写项目里真实做过的取舍；“问我”是五条离线预设问答（`<details>`）。
+“关于”区和问答头像使用基于原照片编辑的暖调肖像。小刘分身保留微笑、鼠尾草绿外套和手中的光学镜片，用柔和光影表现体积。桌面端可拖动，移动端停靠在首屏末尾。问题在本地做关键词匹配，不上传；回答播放网站预先生成的普通话音频，不使用浏览器系统声线，也不是本人录音。语音按需加载，可重听、静音。三条“工作笔记”用第一人称写项目里真实做过的取舍；“问我”是五条离线预设问答（`<details>`）。
 
 技术细节是内容本身：批量线对图、`f₀ = 1000 / p`、Imax/Imin 与质量状态、O1/O2 中心线与 ESF/梯度边缘、鲁棒圆拟合、线/角偏心、µm 级精度。演示数值全部标注为模拟数据，不编造真实结果。
 
@@ -55,10 +55,11 @@ styles.css                日光玻璃视觉系统
 light.js                  棱镜 / 焦散光场景（Canvas 2D）
 script.js                 vCard / 复制邮箱 / 首页 MTF 卡
 favicon.svg               棱镜图标
-assets/portrait.jpg       个人侧写照片
-pet.js                    手绘坐姿分身 + 离线语音问答（拖动、换声、关键词匹配、语音合成）
-assets/pet-avatar.svg     手绘分身头部（Open Peeps，重新配色）
-assets/pet-character.svg  坐姿分身完整合成
+assets/portrait.jpg       原始肖像照片
+assets/portrait-warm.jpg  暖调肖像（关于区、问答头像）
+pet.js                    小刘分身及问答（拖动、重听、静音）
+assets/pet-xiaoliu.svg    手持光学镜片的坐姿分身
+assets/voice/             预生成普通话 MP3，修改问答时同步更新对应片段
 assets/og.png             1200×630 分享卡（肖像 + 棱镜光）
 work/
   mtf.html                批量 MTF / 单目标线对测试台
@@ -81,8 +82,8 @@ PRODUCT.md                产品/内容上下文
 - 固定版式在 320px 下仍可读，演示图标注在小屏放大
 - vCard 下载包含刘东琦 / AI 软件开发工程师 / 2823641678@qq.com
 - 复制邮箱正常
-- 手绘坐姿分身可拖动、打开语音问答；关键词问答、语音开关、换声、移动端停靠均正常
-- 语音只在用户点击后播放；问题不上传，由浏览器本地语音合成
+- 坐姿分身可拖动、打开语音问答；关键词问答、语音开关、重听、移动端停靠均正常
+- 语音只在用户操作后按需加载播放；问题不上传
 - 肖像、`assets/og.png` 分享卡与五个问答加载正常
 - 光场景在 `prefers-reduced-motion` 下绘制静态帧
 
@@ -97,7 +98,9 @@ PRODUCT.md                产品/内容上下文
 
 ## 插画来源
 
-坐姿分身基于 [Open Peeps](https://www.openpeeps.com/) by Pablo Stanley 的手绘人物素材（CC0），在本站重新配色、拼合为黑发、浅蓝领口/白 T 的坐姿角色。授权说明见 `assets/licenses/open-peeps.txt`。
+旧版插画素材 `assets/pet-avatar.svg` 和 `assets/pet-character.svg` 基于 [Open Peeps](https://www.openpeeps.com/) by Pablo Stanley（CC0），保留于仓库但不再加载。授权说明见 `assets/licenses/open-peeps.txt`。
+
+普通话配音使用 [Kokoro-82M](https://huggingface.co/hexgrad/Kokoro-82M) 的 `zm_yunxi` 声线在本地生成。语音稿按口语断句，术语细节与邮箱保留在屏幕文字中；部署仅需 MP3，不需要模型或语音服务。
 
 ## 注意
 

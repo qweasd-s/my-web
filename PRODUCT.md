@@ -32,9 +32,9 @@ A Refract personal card for 刘东琦 (Liu Dongqi), an AI software development e
 
 The site's virtual image is a light personal profile plus a small interactive character, not a 3D avatar:
 
-- A real 4:5 portrait in the about section, with a first-person bio and the current facts (`现在 / 方向 / 精度 / 地点 / 更新`).
-- A hand-drawn seated ink companion composed from Open Peeps parts (CC0), recolored to black hair, skin, a light-blue collar and a white/ink outfit. On desktop it sits at the bottom-right edge, can be dragged, floats and tilts toward the pointer. On mobile it docks after the hero stage so it never covers copy. The real photo remains in the about section and in the voice panel header.
-- A voice Q&A panel with the real portrait, page-aware quick questions, a text input, a browser-synthesized Chinese voice, and a `换声` control when multiple voices exist. The default rate/pitch is deliberately softer. Keyword matching runs locally; questions are not uploaded. It is labelled as an offline肖像分身, not a live AI. The illustration is a stylized character, not a literal portrait.
+- A warm 4:5 portrait based on the original photo, with a first-person bio and the current facts (`现在 / 方向 / 精度 / 地点 / 更新`). The same portrait appears in the voice panel.
+- A stylized seated companion with a smile, a sage-green overshirt and an optical lens. On desktop it sits at the bottom-right edge, can be dragged, floats and tilts toward the pointer. On mobile it docks after the hero stage.
+- A voice Q&A panel with page-aware suggestions, a text input, replay and mute. Questions are matched locally and never uploaded; the replies use pre-generated Mandarin audio, not a recording or live AI.
 - First-person work notes describing real trade-offs, and five offline preset Q&A entries in the user's voice.
 - The pet is a playful representation, not a claim of sentience or a live AI. No invented biography.
 
@@ -45,7 +45,7 @@ The site's virtual image is a light personal profile plus a small interactive ch
 - Do not expose internal model codes, company data, customer information, internal UI, raw measurement images, or line-specific parameters. Algorithm descriptions stay at a public-safe conceptual level.
 - Demos must remain understandable without JS: the copy and figures carry the explanation; the controls enhance it.
 - The Q&A is honest about being offline/preset. Do not label it as a live AI or imply it can answer arbitrary questions.
-- Voice is browser `speechSynthesis` only; never record the user, upload questions, or autoplay speech before a click.
+- Voice uses self-hosted clips only; never record the user, upload questions, or autoplay speech before a click.
 - The mobile pet must stay in the document flow; it must never cover the bio, facts, or CTAs.
 - The spectrum exists only inside the generated light; never as a decorative UI color.
 

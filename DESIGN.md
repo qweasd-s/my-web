@@ -6,7 +6,7 @@ A sunlit optical bench. White plaster walls, a glazed window, one prism throwing
 
 The theme is **Refract (glass / pool)** from [Nutlope/hallmark](https://github.com/Nutlope/hallmark). The prism is the only source of color; the spectrum stays inside the light and never becomes a border, a button, or a gradient headline.
 
-The seated ink companion is built from [Open Peeps](https://www.openpeeps.com/) by Pablo Stanley (CC0), recolored and recomposed; see `assets/licenses/open-peeps.txt`.
+The profile pairs a warm editorial portrait with a smiling sage-green companion holding an optical lens, a small reference to the site's subject.
 
 ## Principles
 
@@ -64,8 +64,8 @@ No mono face. No letter-spaced capitals. Units and numerals use tabular figures.
 - **About band**: paper-2 ground, statement left, fact list right.
 - **Contact**: large display line, email / vCard / copy actions, confidentiality note.
 - **Portrait profile**: 4:5 portrait in the about band, warm paper and a tinted shadow; caption, first-person bio, and a five-row fact list (now / direction / precision / place / updated).
-- **Ink companion**: a hand-drawn seated character composed from Open Peeps parts, recolored to black hair, skin, a light-blue collar and a white/ink outfit. It sits at the bottom edge of the page, floats and tilts toward the pointer, and shows voice bars while speaking. On mobile it docks after the hero stage so it never covers copy. The real photo stays in the about section and in the voice panel header.
-- **Voice Q&A panel**: opens from the character. The real photo appears as the header avatar, with an honest `肖像分身` label, four page-aware chips, a text input, a voice on/off pill, and a `换声` control when multiple Chinese voices exist. Questions are matched locally by keywords; answers are spoken with the browser's Chinese `speechSynthesis` voice at a slower, softer rate/pitch. The panel says it is offline and does not upload questions.
+- **Companion**: a relaxed seated character with dark hair, a sage-green overshirt and a small optical lens. It floats and tilts toward the pointer, and shows voice bars while speaking. On mobile it docks after the hero stage. The warm portrait appears in the about section and in the voice panel header.
+- **Voice Q&A panel**: includes page-aware chips, a text input, mute and replay. Questions are matched locally; only pre-generated Mandarin clips are played, so the voice is consistent across browsers. The panel identifies the voice as synthetic, not a recording.
 - **Work notes**: first-person project trade-offs; label + display title + short body, separated by rules.
 - **Ask me**: five native `<details>` rows; question + accent plus/minus; answers in first person. Labeled as offline preset answers, not a live AI.
 - **Case pages**: back link, title, lead, four-cell meta table; test card in the lit stage; numbered method and specs below; next-tool + email; footer. The cross-target and trajectory schematics use ink line work with accent centerlines and one accent measurement marker.

@@ -858,10 +858,9 @@ svg {
   height: auto;
   aspect-ratio: 4 / 5;
   object-fit: cover;
-  object-position: 50% 14%;
+  object-position: 50% 19%;
   border-radius: var(--radius-card);
-  box-shadow: var(--shadow-card);
-  filter: saturate(0.96) contrast(1.02);
+  box-shadow: var(--shadow-card), 0 12px 36px rgb(59 78 67 / 0.09);
 }
 
 .about__portrait figcaption {
@@ -1221,7 +1220,7 @@ svg {
   flex: none;
   border-radius: 50%;
   object-fit: cover;
-  object-position: 50% 14%;
+  object-position: 50% 24%;
   box-shadow: 0 0 0 1px var(--color-rule);
 }
 
@@ -1246,7 +1245,6 @@ svg {
 }
 
 .pet-panel__voice,
-.pet-panel__swap,
 .pet-panel__close {
   border: 1px solid var(--color-rule);
   border-radius: var(--radius-pill);
@@ -1258,8 +1256,7 @@ svg {
   cursor: pointer;
 }
 
-.pet-panel__voice,
-.pet-panel__swap {
+.pet-panel__voice {
   padding: 6px 8px;
   white-space: nowrap;
 }
@@ -1296,6 +1293,23 @@ svg {
   font-size: 13px;
   line-height: 1.55;
   text-wrap: pretty;
+}
+
+.pet-panel__replay {
+  margin-top: 5px;
+  padding: 5px 2px;
+  border: 0;
+  background: none;
+  color: var(--color-accent);
+  font-size: 12px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.pet-panel__replay:disabled {
+  opacity: 0.55;
+  cursor: default;
 }
 
 .pet-panel__chips {
