@@ -80,6 +80,7 @@
           <b>刘东琦</b>
           <span>离线语音分身</span>
         </div>
+        <button class="pet-panel__swap" type="button" data-pet-swap hidden>换声</button>
         <button class="pet-panel__voice" type="button" data-pet-voice aria-pressed="true">声音 开</button>
         <button class="pet-panel__close" type="button" data-pet-close aria-label="关闭问答">×</button>
       </header>
@@ -92,72 +93,18 @@
         <input id="pet-question" name="q" type="text" autocomplete="off" placeholder="问一个简单问题…" data-pet-input>
         <button type="submit">发送</button>
       </form>
-      <p class="pet-panel__note" data-pet-note>按肖像画的离线分身；离线匹配，不上传问题，语音由浏览器合成。不是在线 AI。</p>
+      <p class="pet-panel__note" data-pet-note>肖像分身；离线匹配，不上传问题，语音由浏览器合成。不是在线 AI。</p>
     </section>
     <div class="pet__bubble" role="status" aria-live="polite" aria-hidden="true">
       <p class="pet__text"></p>
     </div>
     <button class="pet__character" type="button" aria-label="和刘东琦对话，可以拖动我">
-      <svg class="pet-svg" viewBox="0 0 220 300" aria-hidden="true" focusable="false">
-
-  <defs>
-    <clipPath id="pet-head-clip">
-      <path d="M64 116c0-37 20-62 46-62s46 25 46 62c0 36-19 62-46 62s-46-26-46-62Z"/>
-    </clipPath>
-  </defs>
-  <ellipse cx="110" cy="286" rx="62" ry="8" fill="#1d3145" opacity=".10"/>
-  <g class="pet-bob">
-  <g class="pet-legs">
-    <rect x="82" y="232" width="20" height="48" rx="9" fill="#26384a"/>
-    <rect x="118" y="232" width="20" height="48" rx="9" fill="#26384a"/>
-    <rect x="76" y="270" width="30" height="14" rx="7" fill="#1d3145"/>
-    <rect x="114" y="270" width="30" height="14" rx="7" fill="#1d3145"/>
-  </g>
-  <g class="pet-body">
-    <path d="M64 190c0-10 9-18 20-18h52c11 0 20 8 20 18v42c0 8-6 14-14 14H78c-8 0-14-6-14-14Z" fill="#f7f4ea"/>
-    <path d="M62 192c0-12 10-21 22-21h14l-6 78H78c-9 0-16-7-16-16Z" fill="#b8c8d4"/>
-    <path d="M158 192c0-12-10-21-22-21h-14l6 78h14c9 0 16-7 16-16Z" fill="#b8c8d4"/>
-    <path d="M104 171 96 186l14 7 14-7-8-15Z" fill="#fffdf6"/>
-    <path d="M96 186c-7 3-10 9-10 16v30" fill="none" stroke="#93a8b8" stroke-width="2"/>
-    <path d="M124 186c7 3 10 9 10 16v30" fill="none" stroke="#93a8b8" stroke-width="2"/>
-    <path d="M62 196c-8 4-12 12-13 23l-2 22c0 6 4 10 9 10s9-4 9-9l1-17" fill="#b8c8d4" stroke="#93a8b8" stroke-width="2"/>
-    <path d="M158 196c8 4 12 12 13 23l2 22c0 6-4 10-9 10s-9-4-9-9l-1-17" fill="#b8c8d4" stroke="#93a8b8" stroke-width="2"/>
-    <circle cx="58" cy="248" r="8" fill="#f2c9b4"/>
-    <circle cx="162" cy="248" r="8" fill="#f2c9b4"/>
-    <path d="M98 182h24l-6 9h-12Z" fill="#e6e1d3"/>
-    <rect x="118" y="204" width="12" height="15" rx="3" fill="#f7f4ea" stroke="#d8d2c3" stroke-width="1"/>
-    <path d="M77 204h30" stroke="#d8d2c3" stroke-width="1"/>
-    <path d="M75 221h28" stroke="#d8d2c3" stroke-width="1"/>
-  </g>
-  <g class="pet-head">
-    <path d="M68 116c0-34 18-58 42-58s42 24 42 58c0 34-17 58-42 58s-42-24-42-58Z" fill="#f2c9b4"/>
-    <g clip-path="url(#pet-head-clip)">
-      <path d="M57 120c-4-39 18-68 53-68s57 29 53 68c-1 11-5 20-11 25 2-20-5-35-19-43-7 7-19 11-33 11-13 0-24-4-32-11-13 8-20 23-18 43-6-5-9-14-10-25Z" fill="#191a1c"/>
-      <path d="M70 102c8-12 22-19 40-19s32 7 40 19c-2 11-8 18-16 21l-5-13-9 11-10-10-10 10-10-10-9 11-5-13c-8-3-14-10-16-21Z" fill="#191a1c" transform="translate(0,-9)"/>
-      <path d="M76 82c8-8 19-12 34-12s26 4 34 12" fill="none" stroke="rgba(255,255,255,.13)" stroke-width="1.8" stroke-linecap="round"/>
-      <path d="M74 93c7-9 17-14 30-16" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="1.4" stroke-linecap="round"/>
-      <path d="M146 93c-7-9-17-14-30-16" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="1.4" stroke-linecap="round"/>
-    </g>
-    <ellipse cx="62" cy="128" rx="9" ry="15" fill="#f2c9b4"/>
-    <ellipse cx="158" cy="128" rx="9" ry="15" fill="#f2c9b4"/>
-    <g class="pet-eyes">
-      <ellipse cx="93" cy="124" rx="7.8" ry="8.6" fill="#fffdf8"/>
-      <ellipse cx="127" cy="124" rx="7.8" ry="8.6" fill="#fffdf8"/>
-      <g class="pet-pupil">
-        <circle cx="93" cy="125" r="4.2" fill="#1d3145"/>
-        <circle cx="127" cy="125" r="4.2" fill="#1d3145"/>
-        <circle cx="94.8" cy="123" r="1.3" fill="#fff"/>
-        <circle cx="128.8" cy="123" r="1.3" fill="#fff"/>
-      </g>
-    </g>
-    <path d="M84 114c5-3 11-3 16-1" fill="none" stroke="#191a1c" stroke-width="2" stroke-linecap="round"/>
-    <path d="M120 113c5-2 11-2 16 1" fill="none" stroke="#191a1c" stroke-width="2" stroke-linecap="round"/>
-    <path d="M110 131c-1 6-3 9-6 10" fill="none" stroke="#d9a58f" stroke-width="1.6" stroke-linecap="round"/>
-    <path d="M102 151c5 3 11 3 16 0" fill="none" stroke="#b87363" stroke-width="2" stroke-linecap="round"/>
-  </g>
-  </g>
-
-      </svg>
+      <span class="pet-avatar">
+        <img src="${avatarSrc}" alt="" width="682" height="1024">
+        <span class="pet-avatar__status" aria-hidden="true"></span>
+        <span class="pet-avatar__bars" aria-hidden="true"><i></i><i></i><i></i></span>
+      </span>
+      <span class="pet-name">刘东琦 <small>在岗</small></span>
     </button>
     <span class="pet__hint" aria-hidden="true">点我说话</span>
   `;
@@ -169,6 +116,7 @@
   const form = pet.querySelector('[data-pet-form]');
   const input = pet.querySelector('[data-pet-input]');
   const voiceBtn = pet.querySelector('[data-pet-voice]');
+  const swapBtn = pet.querySelector('[data-pet-swap]');
   const closeBtn = pet.querySelector('[data-pet-close]');
   const note = pet.querySelector('[data-pet-note]');
   const button = pet.querySelector('.pet__character');
@@ -183,6 +131,37 @@
     // Use the default.
   }
 
+  let voices = [];
+  let voiceIndex = 0;
+
+  const rankVoice = (voice) => {
+    const name = `${voice.name} ${voice.voiceURI}`.toLowerCase();
+    let score = 0;
+    if (/yunxi|yunyang|kangkang|liang|male/.test(name)) score += 6;
+    if (/natural|neural|premium|enhanced/.test(name)) score += 5;
+    if (/tingting|meijia|xiaoxiao|xiaoyi|google/.test(name)) score += 3;
+    if (/espeak|compact|robot|novelty/.test(name)) score -= 8;
+    if (voice.localService) score += 1;
+    return score;
+  };
+
+  const loadVoices = () => {
+    if (!canSpeak) return;
+    voices = window.speechSynthesis
+      .getVoices()
+      .filter((voice) => /^zh/i.test(voice.lang))
+      .sort((a, b) => rankVoice(b) - rankVoice(a));
+    try {
+      const saved = localStorage.getItem('ldq-pet-voice-name');
+      const index = voices.findIndex((voice) => voice.name === saved);
+      if (index >= 0) voiceIndex = index;
+    } catch (error) {
+      // Use the best guess.
+    }
+    if (voiceIndex >= voices.length) voiceIndex = 0;
+    if (swapBtn) swapBtn.hidden = voices.length < 2;
+  };
+
   let greeted = false;
   let hideTimer = 0;
   let drag = null;
@@ -196,10 +175,10 @@
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(message);
     utterance.lang = 'zh-CN';
-    utterance.rate = 0.98;
-    utterance.pitch = 0.95;
-    const voices = window.speechSynthesis.getVoices();
-    const chinese = voices.find((voice) => /^zh/i.test(voice.lang));
+    utterance.rate = 0.9;
+    utterance.pitch = 0.96;
+    utterance.volume = 0.92;
+    const chinese = voices[voiceIndex] || voices.find((voice) => /^zh/i.test(voice.lang));
     if (chinese) utterance.voice = chinese;
     utterance.onstart = () => pet.classList.add('is-speaking');
     utterance.onend = () => pet.classList.remove('is-speaking');
@@ -271,6 +250,26 @@
     note.textContent = '当前浏览器不支持语音；可以先看文字回答。';
   } else {
     paintVoice();
+  }
+
+  if (canSpeak) {
+    loadVoices();
+    if ('onvoiceschanged' in window.speechSynthesis) {
+      window.speechSynthesis.onvoiceschanged = loadVoices;
+    }
+  }
+
+  if (swapBtn) {
+    swapBtn.addEventListener('click', () => {
+      if (voices.length < 2) return;
+      voiceIndex = (voiceIndex + 1) % voices.length;
+      try {
+        localStorage.setItem('ldq-pet-voice-name', voices[voiceIndex].name);
+      } catch (error) {
+        // Preference persistence is optional.
+      }
+      speak('你好，我是刘东琦。');
+    });
   }
 
   voiceBtn.addEventListener('click', () => {
@@ -410,12 +409,7 @@
     const cx = rect.left + rect.width / 2;
     const cy = rect.top + rect.height * 0.4;
     const dx = event.clientX - cx;
-    const dy = event.clientY - cy;
-    const distance = Math.max(1, Math.hypot(dx, dy));
-    const strength = Math.min(2.4, distance / 90);
-    pet.style.setProperty('--pet-look-x', `${(dx / distance) * strength}px`);
-    pet.style.setProperty('--pet-look-y', `${(dy / distance) * strength}px`);
-    pet.style.setProperty('--pet-tilt', `${clamp(dx / 120, -2, 2)}deg`);
+    pet.style.setProperty('--pet-tilt', `${clamp(dx / 160, -2.2, 2.2)}deg`);
   }, { passive: true });
 
   const restorePosition = () => {

@@ -33,8 +33,8 @@ A Refract personal card for 刘东琦 (Liu Dongqi), an AI software development e
 The site's virtual image is a light personal profile plus a small interactive character, not a 3D avatar:
 
 - A real 4:5 portrait in the about section, with a first-person bio and the current facts (`现在 / 方向 / 精度 / 地点 / 更新`).
-- A vector desktop pet drawn from the portrait: black hair and bangs, light blue overshirt, white tee. On desktop it sits bottom-right, can be dragged, blinks, and follows the pointer with its eyes. On mobile it docks after the hero stage so it never covers copy.
-- A voice Q&A panel with the real portrait, page-aware quick questions, a text input, and a browser-synthesized Chinese voice. Keyword matching runs locally; questions are not uploaded. It is labelled as a portrait-based offline分身, not a live AI.
+- A circular portrait companion using the real photo, with a presence dot and name. On desktop it sits bottom-right, can be dragged, floats and tilts toward the pointer. On mobile it docks after the hero stage so it never covers copy.
+- A voice Q&A panel with the real portrait, page-aware quick questions, a text input, a browser-synthesized Chinese voice, and a `换声` control when multiple voices exist. The default rate/pitch is deliberately softer. Keyword matching runs locally; questions are not uploaded. It is labelled as an offline肖像分身, not a live AI.
 - First-person work notes describing real trade-offs, and five offline preset Q&A entries in the user's voice.
 - The pet is a playful representation, not a claim of sentience or a live AI. No invented biography.
 
