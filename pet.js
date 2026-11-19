@@ -1,30 +1,103 @@
-/* Desktop pet: a small, draggable character drawn from the portrait. */
+/* Desktop pet + offline voice Q&A, drawn from the portrait. */
 (() => {
   const mount = document.querySelector('[data-pet-root]') || document.body;
+  if (!mount) return;
 
   const project = document.body.dataset.project;
-  const lines = {
-    mtf: ['在测 MTF，先别晃。', 'NRMSE 超了，也要把状态标出来。', '这条线对，周期 20 µm。'],
-    distortion: ['O1 和 O2 都找到了。', '一阶模型先看真实问题。', '边缘差多少，心里要有数。'],
-    decentration: ['转一圈，再看拟合圆。', '偏心仪还在标定。', '别只信最后一个数。'],
-  }[project] || [
-    '在镜片与代码之间，做测量光的软件。',
-    '可以拖动我。',
-    'µm 级的东西，急不来。',
-    '有问题？发邮件比戳我快。',
+  const avatarSrc = project ? '../assets/portrait.jpg' : 'assets/portrait.jpg';
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const faq = [
+    {
+      keys: ['你是谁', '介绍', '名字', '刘东琦', '小刘'],
+      a: '我是刘东琦，AI 软件开发工程师，在光学镜片行业做测量软件。',
+    },
+    {
+      keys: ['做什么', '项目', '工作', '工具'],
+      a: '我把 MTF、畸变和偏心测量做成工程师真的会用的软件，主要用 MATLAB、Python 和 Qt。',
+    },
+    {
+      keys: ['mtf', '调制传递', '线对'],
+      a: 'MTF 工具批量读明场、暗场和检测图，自动找四方向线对，输出 MTF、质量状态和 Excel / MAT 报表。',
+    },
+    {
+      keys: ['质量', 'nrmse', 'michelson', '校核'],
+      a: 'MTF 结果会带质量状态。NRMSE 超限也保留数值但标出来，另做 Michelson 对比度校核。',
+    },
+    {
+      keys: ['畸变', 'o1', 'o2', '十字'],
+      a: '畸变工具在十字靶图上定位 O1 / O2，用 ESF 和梯度双路边缘交叉校验，最后输出一阶残差图和质检报告。',
+    },
+    {
+      keys: ['一阶', '高阶', '模型'],
+      a: '畸变先用一阶模型。高阶模型能把残差压小，但也可能把拍摄或装配的问题一起拟合掉。',
+    },
+    {
+      keys: ['偏心', '偏心仪', '圆拟合'],
+      a: '偏心仪软件还是 MVP：相机追球心十字像，镜片转一圈后鲁棒拟合圆，再换算线偏心和角偏心。',
+    },
+    {
+      keys: ['精度', 'um', 'µm', '微米', '公差'],
+      a: '精度是 µm 级。具体公差要以标定和软件输出为准，网站上不写没有公开验证过的数值。',
+    },
+    {
+      keys: ['现在', '最近', '在做什么', '进度'],
+      a: '现在在补偏心仪 MVP 的标定和重复性。标定、温漂和标准件验证没走完，不会把它当成最终判定。',
+    },
+    {
+      keys: ['技术', '栈', '会什么', 'matlab', 'python', 'qt', 'opencv'],
+      a: '常用 MATLAB 做批量计算，Python + OpenCV + PySide6 做桌面测量软件，前端是原生 HTML、CSS 和 JS。',
+    },
+    {
+      keys: ['联系', '邮箱', '邮件', '合作', '招聘'],
+      a: '可以直接发邮件到 2823641678@qq.com。',
+    },
+    {
+      keys: ['语音', '声音', '说话'],
+      a: '声音是浏览器合成的中文语音。不想听的话，点右上角的“声音”按钮关掉。',
+    },
+    {
+      keys: ['你好', 'hi', 'hello', '嗨'],
+      a: '你好。可以问我项目、精度、现在在做什么，或者怎么联系我。',
+    },
   ];
 
-  const greeting = window.innerWidth > 900
-    ? '我是刘东琦。可以拖动我，或者点一下。'
-    : '我是刘东琦。点我说话。';
+  const fallback = '这个问题我还没写进离线回答里。可以发邮件到 2823641678@qq.com，或者问我项目、精度、联系方式。';
+  const greeting = '你好，我是刘东琦。可以问我项目、精度，或者怎么联系我。';
+  const chips = {
+    mtf: ['MTF 怎么测', '质量状态', '现在', '联系'],
+    distortion: ['畸变怎么算', '一阶模型', '现在', '联系'],
+    decentration: ['偏心怎么测', '精度', '现在', '联系'],
+  }[project] || ['你是谁', '做什么', '现在', '联系'];
 
   const pet = document.createElement('div');
   pet.className = 'pet';
   pet.innerHTML = `
+    <section class="pet-panel" data-pet-panel tabindex="-1" aria-label="问小刘" aria-hidden="true">
+      <header class="pet-panel__head">
+        <img class="pet-panel__avatar" src="${avatarSrc}" alt="" width="38" height="38">
+        <div class="pet-panel__id">
+          <b>刘东琦</b>
+          <span>离线语音分身</span>
+        </div>
+        <button class="pet-panel__voice" type="button" data-pet-voice aria-pressed="true">声音 开</button>
+        <button class="pet-panel__close" type="button" data-pet-close aria-label="关闭问答">×</button>
+      </header>
+      <div class="pet-panel__answer" data-pet-answer aria-live="polite">
+        <p class="pet-panel__text">${greeting}</p>
+      </div>
+      <div class="pet-panel__chips" data-pet-chips></div>
+      <form class="pet-panel__form" data-pet-form>
+        <label class="sr-only" for="pet-question">问一个简单问题</label>
+        <input id="pet-question" name="q" type="text" autocomplete="off" placeholder="问一个简单问题…" data-pet-input>
+        <button type="submit">发送</button>
+      </form>
+      <p class="pet-panel__note" data-pet-note>按肖像画的离线分身；离线匹配，不上传问题，语音由浏览器合成。不是在线 AI。</p>
+    </section>
     <div class="pet__bubble" role="status" aria-live="polite" aria-hidden="true">
       <p class="pet__text"></p>
     </div>
-    <button class="pet__character" type="button" aria-label="和刘东琦打招呼，可以拖动我">
+    <button class="pet__character" type="button" aria-label="和刘东琦对话，可以拖动我">
       <svg class="pet-svg" viewBox="0 0 220 300" aria-hidden="true" focusable="false">
 
   <defs>
@@ -60,27 +133,27 @@
     <path d="M68 116c0-34 18-58 42-58s42 24 42 58c0 34-17 58-42 58s-42-24-42-58Z" fill="#f2c9b4"/>
     <g clip-path="url(#pet-head-clip)">
       <path d="M57 120c-4-39 18-68 53-68s57 29 53 68c-1 11-5 20-11 25 2-20-5-35-19-43-7 7-19 11-33 11-13 0-24-4-32-11-13 8-20 23-18 43-6-5-9-14-10-25Z" fill="#191a1c"/>
-      <path d="M70 102c8-12 22-19 40-19s32 7 40 19c-2 11-8 18-16 21l-5-13-9 11-10-10-10 10-10-10-9 11-5-13c-8-3-14-10-16-21Z" fill="#191a1c"/>
+      <path d="M70 102c8-12 22-19 40-19s32 7 40 19c-2 11-8 18-16 21l-5-13-9 11-10-10-10 10-10-10-9 11-5-13c-8-3-14-10-16-21Z" fill="#191a1c" transform="translate(0,-9)"/>
       <path d="M76 82c8-8 19-12 34-12s26 4 34 12" fill="none" stroke="rgba(255,255,255,.13)" stroke-width="1.8" stroke-linecap="round"/>
+      <path d="M74 93c7-9 17-14 30-16" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="1.4" stroke-linecap="round"/>
+      <path d="M146 93c-7-9-17-14-30-16" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="1.4" stroke-linecap="round"/>
     </g>
     <ellipse cx="62" cy="128" rx="9" ry="15" fill="#f2c9b4"/>
     <ellipse cx="158" cy="128" rx="9" ry="15" fill="#f2c9b4"/>
     <g class="pet-eyes">
-      <ellipse cx="93" cy="124" rx="9" ry="10" fill="#fffdf8"/>
-      <ellipse cx="127" cy="124" rx="9" ry="10" fill="#fffdf8"/>
+      <ellipse cx="93" cy="124" rx="7.8" ry="8.6" fill="#fffdf8"/>
+      <ellipse cx="127" cy="124" rx="7.8" ry="8.6" fill="#fffdf8"/>
       <g class="pet-pupil">
-        <circle cx="93" cy="125" r="5" fill="#1d3145"/>
-        <circle cx="127" cy="125" r="5" fill="#1d3145"/>
-        <circle cx="95" cy="123" r="1.5" fill="#fff"/>
-        <circle cx="129" cy="123" r="1.5" fill="#fff"/>
+        <circle cx="93" cy="125" r="4.2" fill="#1d3145"/>
+        <circle cx="127" cy="125" r="4.2" fill="#1d3145"/>
+        <circle cx="94.8" cy="123" r="1.3" fill="#fff"/>
+        <circle cx="128.8" cy="123" r="1.3" fill="#fff"/>
       </g>
     </g>
-    <path d="M84 110c5-3 11-3 16-1" fill="none" stroke="#191a1c" stroke-width="2.2" stroke-linecap="round"/>
-    <path d="M120 109c5-2 11-2 16 1" fill="none" stroke="#191a1c" stroke-width="2.2" stroke-linecap="round"/>
+    <path d="M84 114c5-3 11-3 16-1" fill="none" stroke="#191a1c" stroke-width="2" stroke-linecap="round"/>
+    <path d="M120 113c5-2 11-2 16 1" fill="none" stroke="#191a1c" stroke-width="2" stroke-linecap="round"/>
     <path d="M110 131c-1 6-3 9-6 10" fill="none" stroke="#d9a58f" stroke-width="1.6" stroke-linecap="round"/>
     <path d="M102 151c5 3 11 3 16 0" fill="none" stroke="#b87363" stroke-width="2" stroke-linecap="round"/>
-    <ellipse cx="84" cy="142" rx="7" ry="4" fill="#df9b86" opacity=".18"/>
-    <ellipse cx="136" cy="142" rx="7" ry="4" fill="#df9b86" opacity=".18"/>
   </g>
   </g>
 
@@ -90,30 +163,130 @@
   `;
   mount.appendChild(pet);
 
+  const panel = pet.querySelector('[data-pet-panel]');
+  const answer = pet.querySelector('[data-pet-answer]');
+  const chipsWrap = pet.querySelector('[data-pet-chips]');
+  const form = pet.querySelector('[data-pet-form]');
+  const input = pet.querySelector('[data-pet-input]');
+  const voiceBtn = pet.querySelector('[data-pet-voice]');
+  const closeBtn = pet.querySelector('[data-pet-close]');
+  const note = pet.querySelector('[data-pet-note]');
   const button = pet.querySelector('.pet__character');
   const bubble = pet.querySelector('.pet__bubble');
-  const text = pet.querySelector('.pet__text');
-  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const bubbleText = pet.querySelector('.pet__text');
+  const canSpeak = 'speechSynthesis' in window;
+
+  let voiceOn = true;
+  try {
+    voiceOn = localStorage.getItem('ldq-pet-voice') !== '0';
+  } catch (error) {
+    // Use the default.
+  }
+
+  let greeted = false;
   let hideTimer = 0;
-  let lastLine = -1;
-  let hasSpoken = false;
   let drag = null;
   let suppressClick = false;
 
   const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+  const normalize = (value) => value.toLowerCase().replace(/[\s，。？！、,.!?：:；;]/g, '');
 
-  const setBubble = (message, duration = 4200) => {
-    window.clearTimeout(hideTimer);
-    text.textContent = message;
-    pet.classList.add('is-talking');
-    bubble.setAttribute('aria-hidden', 'false');
-    if (window.innerWidth > 900) {
-      hideTimer = window.setTimeout(() => {
-        pet.classList.remove('is-talking');
-        bubble.setAttribute('aria-hidden', 'true');
-      }, duration);
-    }
+  const speak = (message) => {
+    if (!voiceOn || !canSpeak || !message) return;
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(message);
+    utterance.lang = 'zh-CN';
+    utterance.rate = 0.98;
+    utterance.pitch = 0.95;
+    const voices = window.speechSynthesis.getVoices();
+    const chinese = voices.find((voice) => /^zh/i.test(voice.lang));
+    if (chinese) utterance.voice = chinese;
+    utterance.onstart = () => pet.classList.add('is-speaking');
+    utterance.onend = () => pet.classList.remove('is-speaking');
+    utterance.onerror = () => pet.classList.remove('is-speaking');
+    window.speechSynthesis.speak(utterance);
   };
+
+  const stopSpeech = () => {
+    if (canSpeak) window.speechSynthesis.cancel();
+    pet.classList.remove('is-speaking');
+  };
+
+  const showAnswer = (question, reply) => {
+    answer.replaceChildren();
+    if (question) {
+      const asked = document.createElement('p');
+      asked.className = 'pet-panel__question';
+      asked.textContent = `你问：${question}`;
+      answer.appendChild(asked);
+    }
+    const replyNode = document.createElement('p');
+    replyNode.className = 'pet-panel__text';
+    replyNode.textContent = reply;
+    answer.appendChild(replyNode);
+  };
+
+  const ask = (query) => {
+    const raw = String(query || '').trim();
+    if (!raw) return;
+    const normalized = normalize(raw);
+    let best = null;
+    let bestScore = 0;
+    faq.forEach((item) => {
+      const score = item.keys.reduce(
+        (total, key) => total + (normalized.includes(normalize(key)) ? 1 : 0),
+        0
+      );
+      if (score > bestScore) {
+        bestScore = score;
+        best = item;
+      }
+    });
+    const reply = best ? best.a : fallback;
+    showAnswer(raw, reply);
+    speak(reply);
+    input.value = '';
+  };
+
+  chips.forEach((label) => {
+    const chip = document.createElement('button');
+    chip.type = 'button';
+    chip.textContent = label;
+    chip.addEventListener('click', () => ask(label));
+    chipsWrap.appendChild(chip);
+  });
+
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    ask(input.value);
+  });
+
+  const paintVoice = () => {
+    voiceBtn.textContent = voiceOn ? '声音 开' : '声音 关';
+    voiceBtn.setAttribute('aria-pressed', String(voiceOn));
+  };
+
+  if (!canSpeak) {
+    voiceBtn.hidden = true;
+    note.textContent = '当前浏览器不支持语音；可以先看文字回答。';
+  } else {
+    paintVoice();
+  }
+
+  voiceBtn.addEventListener('click', () => {
+    voiceOn = !voiceOn;
+    try {
+      localStorage.setItem('ldq-pet-voice', voiceOn ? '1' : '0');
+    } catch (error) {
+      // Preference persistence is optional.
+    }
+    paintVoice();
+    if (!voiceOn) {
+      stopSpeech();
+    } else {
+      speak('声音已打开。');
+    }
+  });
 
   const hideBubble = () => {
     window.clearTimeout(hideTimer);
@@ -121,12 +294,39 @@
     bubble.setAttribute('aria-hidden', 'true');
   };
 
-  const nextLine = () => {
-    if (lines.length === 1) return lines[0];
-    let index = Math.floor(Math.random() * lines.length);
-    if (index === lastLine) index = (index + 1) % lines.length;
-    lastLine = index;
-    return lines[index];
+  const setBubble = (message, duration = 4200) => {
+    window.clearTimeout(hideTimer);
+    bubbleText.textContent = message;
+    pet.classList.add('is-talking');
+    bubble.setAttribute('aria-hidden', 'false');
+    if (window.innerWidth > 900) {
+      hideTimer = window.setTimeout(hideBubble, duration);
+    }
+  };
+
+  const openPanel = () => {
+    pet.classList.add('is-chatting');
+    panel.setAttribute('aria-hidden', 'false');
+    hideBubble();
+    panel.focus({ preventScroll: true });
+    if (!greeted) {
+      greeted = true;
+      speak(greeting);
+    }
+  };
+
+  const closePanel = () => {
+    pet.classList.remove('is-chatting');
+    panel.setAttribute('aria-hidden', 'true');
+    stopSpeech();
+  };
+
+  const togglePanel = () => {
+    if (pet.classList.contains('is-chatting')) {
+      closePanel();
+    } else {
+      openPanel();
+    }
   };
 
   button.addEventListener('click', () => {
@@ -134,17 +334,16 @@
       suppressClick = false;
       return;
     }
-    if (pet.classList.contains('is-talking')) {
-      hideBubble();
-      return;
-    }
+    togglePanel();
+  });
 
-    if (!hasSpoken) {
-      hasSpoken = true;
-      setBubble(project ? lines[0] : greeting);
-      return;
+  closeBtn.addEventListener('click', closePanel);
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && pet.classList.contains('is-chatting')) {
+      closePanel();
+      button.focus();
     }
-    setBubble(nextLine());
   });
 
   button.addEventListener('pointerdown', (event) => {
@@ -206,9 +405,8 @@
     pet.classList.remove('is-dragging');
   });
 
-  // Keep the character's eyes on the pointer.
   window.addEventListener('pointermove', (event) => {
-    const rect = pet.getBoundingClientRect();
+    const rect = button.getBoundingClientRect();
     const cx = rect.left + rect.width / 2;
     const cy = rect.top + rect.height * 0.4;
     const dx = event.clientX - cx;
@@ -254,16 +452,10 @@
   restorePosition();
 
   if (!reduce && window.innerWidth > 900) {
-    try {
-      if (!sessionStorage.getItem('ldq-pet-greeted')) {
-        sessionStorage.setItem('ldq-pet-greeted', '1');
-        window.setTimeout(() => {
-          hasSpoken = true;
-          setBubble(project ? lines[0] : greeting, 5000);
-        }, 1800);
+    window.setTimeout(() => {
+      if (!pet.classList.contains('is-chatting')) {
+        setBubble('点我，问我点什么。', 4200);
       }
-    } catch (error) {
-      // Greeting is optional.
-    }
+    }, 1800);
   }
 })();

@@ -33,7 +33,8 @@ A Refract personal card for 刘东琦 (Liu Dongqi), an AI software development e
 The site's virtual image is a light personal profile plus a small interactive character, not a 3D avatar:
 
 - A real 4:5 portrait in the about section, with a first-person bio and the current facts (`现在 / 方向 / 精度 / 地点 / 更新`).
-- A vector desktop pet drawn from the portrait: black hair and bangs, light blue overshirt, white tee. On desktop it sits bottom-right, can be dragged, blinks, follows the pointer with its eyes, and speaks a short line on click. On mobile it docks after the hero stage so it never covers copy.
+- A vector desktop pet drawn from the portrait: black hair and bangs, light blue overshirt, white tee. On desktop it sits bottom-right, can be dragged, blinks, and follows the pointer with its eyes. On mobile it docks after the hero stage so it never covers copy.
+- A voice Q&A panel with the real portrait, page-aware quick questions, a text input, and a browser-synthesized Chinese voice. Keyword matching runs locally; questions are not uploaded. It is labelled as a portrait-based offline分身, not a live AI.
 - First-person work notes describing real trade-offs, and five offline preset Q&A entries in the user's voice.
 - The pet is a playful representation, not a claim of sentience or a live AI. No invented biography.
 
@@ -44,6 +45,7 @@ The site's virtual image is a light personal profile plus a small interactive ch
 - Do not expose internal model codes, company data, customer information, internal UI, raw measurement images, or line-specific parameters. Algorithm descriptions stay at a public-safe conceptual level.
 - Demos must remain understandable without JS: the copy and figures carry the explanation; the controls enhance it.
 - The Q&A is honest about being offline/preset. Do not label it as a live AI or imply it can answer arbitrary questions.
+- Voice is browser `speechSynthesis` only; never record the user, upload questions, or autoplay speech before a click.
 - The mobile pet must stay in the document flow; it must never cover the bio, facts, or CTAs.
 - The spectrum exists only inside the generated light; never as a decorative UI color.
 

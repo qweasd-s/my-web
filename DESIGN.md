@@ -14,7 +14,7 @@ The theme is **Refract (glass / pool)** from [Nutlope/hallmark](https://github.c
 - Technical detail is content: line pairs, `f₀ = 1000 / p`, Imax/Imin, O1/O2, ESF/gradient edges, trajectories, µm.
 - Illustrative values are labelled `演示` / `示意`; no invented commercial claims.
 - Sentence case; no tracked capitals, no mono-as-costume, no eyebrow chips, no hero metrics.
-- One personal side profile plus one desktop pet, not a 3D avatar: a real portrait, first-person field notes, an honest offline Q&A, and a small drawn character that can be dragged and clicked. No fake live AI.
+- One personal side profile plus one desktop pet, not a 3D avatar: a real portrait, first-person field notes, an honest offline Q&A, and a small drawn character that can be dragged, clicked and spoken to. No fake live AI.
 
 ## Material and color
 
@@ -62,7 +62,8 @@ No mono face. No letter-spaced capitals. Units and numerals use tabular figures.
 - **About band**: paper-2 ground, statement left, fact list right.
 - **Contact**: large display line, email / vCard / copy actions, confidentiality note.
 - **Portrait profile**: 4:5 portrait in the about band, warm paper and a tinted shadow; caption, first-person bio, and a five-row fact list (now / direction / precision / place / updated).
-- **Desktop pet**: a small vector character drawn from the portrait (black hair and bangs, light blue overshirt, white tee). On desktop it is fixed bottom-right, draggable, clickable for a speech line, with pointer-following eyes and a blink. On mobile it docks after the hero stage so it never covers copy.
+- **Desktop pet**: a small vector character drawn from the portrait (black hair and bangs, light blue overshirt, white tee). On desktop it is fixed bottom-right, draggable, with pointer-following eyes and a blink. On mobile it docks after the hero stage so it never covers copy.
+- **Voice Q&A panel**: opens from the pet. A real portrait avatar, an honest `按肖像画的离线分身` label, four page-aware chips, a text input, and a voice on/off pill. Questions are matched locally by keywords; answers are spoken with the browser's Chinese `speechSynthesis` voice. The panel says it is offline and does not upload questions.
 - **Work notes**: first-person project trade-offs; label + display title + short body, separated by rules.
 - **Ask me**: five native `<details>` rows; question + accent plus/minus; answers in first person. Labeled as offline preset answers, not a live AI.
 - **Case pages**: back link, title, lead, four-cell meta table; test card in the lit stage; numbered method and specs below; next-tool + email; footer. The cross-target and trajectory schematics use ink line work with accent centerlines and one accent measurement marker.
@@ -90,6 +91,7 @@ No mono face. No letter-spaced capitals. Units and numerals use tabular figures.
 - Color is never the only cue: every state has a word (`演示`, `初版`, `清晰` / `离焦`).
 - Reduced motion removes transitions and freezes the light.
 - Q&A uses native `<details>`/`<summary>`, so it works with keyboard and without JavaScript.
+- The voice panel focuses on open, closes with Escape, marks the speaking state, and never autoplays speech; users can mute it.
 - The pet is a labelled button, does not trap focus, and is draggable; on mobile it is in the document flow, not a fixed overlay.
 
 ## Anti-patterns
